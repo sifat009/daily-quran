@@ -1,0 +1,87 @@
+vitest.config.ts
+vite.config.ts
+tsconfig.node.json
+tsconfig.json
+tsconfig.app.json
+postcss.config.js
+index.html
+eslint.config.js
+components.json
+.gitignore
+public/
+    favicon.ico
+    robots.txt
+    placeholder.svg
+src/
+    vite-env.d.ts
+    main.tsx
+    index.css
+    App.tsx
+    App.css
+    pages/
+        Dashboard.tsx
+        Index.tsx
+        Login.tsx
+        NotFound.tsx
+        QuranBrowser.tsx
+        Signup.tsx
+    lib/
+        utils.ts
+    hooks/
+        use-mobile.tsx
+        use-toast.tsx
+    data/
+        surah.ts
+    components/
+        ui/
+            accordion.tsx
+            alert-dialog.tsx
+            alert.tsx
+            aspect-ratio.tsx
+            avatar.tsx
+            badge.tsx
+            breadcrumb.tsx
+            button.tsx
+            calendar.tsx
+            card.tsx
+            carousel.tsx
+            chart.tsx
+            checkbox.tsx
+            collapsible.tsx
+            command.tsx
+            context-menu.tsx
+            dialog.tsx
+            drawer.tsx
+            dropdown-menu.tsx
+            form.tsx
+            hover-card.tsx
+            input-otp.tsx
+            input.tsx
+            label.tsx
+            menubar.tsx
+            navigation-menu.tsx
+            pagination.tsx
+            popover.tsx
+            progress.tsx
+            radio-group.tsx
+            resizable.tsx
+            scroll-area.tsx
+            select.tsx
+            separator.tsx
+            sheet.tsx
+            sidebar.tsx
+            skeleton.tsx
+            slider.tsx
+            switch.tsx
+            table.tsx
+            tabs.tsx
+            textarea.tsx
+            toast.tsx
+            toggle.tsx
+            tooltip.tsx
+            use-toast.tsx
+        Footer.tsx
+        Navbar.tsx
+        NavLink.tsx
+        PricingSection.tsx
+        TodaysAyah.tsx

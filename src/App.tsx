@@ -5,9 +5,6 @@ import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import Index from './pages/Index';
 import QuranBrowser from './pages/QuranBrowser';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import Dashboard from './pages/Dashboard';
 import NotFound from './pages/NotFound';
 
 const queryClient = new QueryClient();
@@ -21,9 +18,6 @@ const App = () => (
 				<Routes>
 					<Route path="/" element={<Index />} />
 					<Route path="/quran" element={<QuranBrowser />} />
-					<Route path="/login" element={<Login />} />
-					<Route path="/signup" element={<Signup />} />
-					<Route path="/dashboard" element={<Dashboard />} />
 					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</BrowserRouter>

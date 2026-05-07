@@ -1,5 +1,4 @@
 import { Check, ArrowRight, Sparkles, BookOpen, Crown, Zap } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -7,9 +6,9 @@ import { Badge } from '@/components/ui/badge';
 const plans = [
 	{
 		name: 'Seeker',
-		price: '$0',
-		period: 'for 7 days',
-		description: 'Try Daily Quran, risk-free for a week',
+		price: 'Free',
+		period: '',
+		description: 'Daily Ayahs delivered to your inbox',
 		features: [
 			'1 Ayah delivered daily',
 			'Arabic text + English translation',
@@ -17,7 +16,7 @@ const plans = [
 			'Audio recitation',
 			'Full Quran browser access',
 		],
-		cta: 'Start 7 Days Free',
+		cta: 'Subscribe Now',
 		highlighted: false,
 		icon: Zap,
 	},
@@ -28,13 +27,10 @@ const plans = [
 		description: 'All 6,236 Ayahs. Chapter by chapter. The complete plan.',
 		features: [
 			'Everything in Seeker',
-			'Personalized delivery time',
-			'Progress tracking dashboard',
 			'Chapters 1–114, delivered in order',
-			'Bookmark & revisit Ayahs',
-			'Priority support with early features',
+			'Support the mission',
 		],
-		cta: 'Get Complete Quran Plan',
+		cta: 'Support the Project',
 		highlighted: true,
 		badge: 'Most Popular',
 		icon: BookOpen,
@@ -47,11 +43,10 @@ const plans = [
 		features: [
 			'Everything in Complete Quran',
 			'Save $12 per year',
-			'Exclusive Ramadan collection',
 			'Early access to new features',
 			'Support the mission',
 		],
-		cta: 'Go Premium Plan',
+		cta: 'Go Premium',
 		highlighted: false,
 		badge: 'Best Value',
 		icon: Crown,
@@ -137,7 +132,10 @@ const PricingSection = () => {
 									))}
 								</ul>
 
-								<Link to="/signup" className="mt-8 block">
+								<button
+									onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+									className="mt-8 block w-full"
+								>
 									<Button
 										className={`w-full gap-2 ${
 											plan.highlighted ? 'bg-secondary hover:bg-secondary/90 text-secondary-foreground' : ''
@@ -147,7 +145,7 @@ const PricingSection = () => {
 									>
 										{plan.cta} <ArrowRight className="h-4 w-4" />
 									</Button>
-								</Link>
+								</button>
 							</CardContent>
 						</Card>
 					))}

@@ -11,11 +11,34 @@ import PricingSection from '@/components/PricingSection';
 
 const Index = () => {
 	const [email, setEmail] = useState('');
+	const [isSubscribing, setIsSubscribing] = useState(false);
+	const [subscribeMessage, setSubscribeMessage] = useState('');
 
-	const handleSubscribe = (e: React.FormEvent) => {
+	const handleSubscribe = async (e: React.FormEvent) => {
 		e.preventDefault();
-		console.log('Subscribe:', email);
-		setEmail('');
+		setIsSubscribing(true);
+		setSubscribeMessage('');
+
+		try {
+			const response = await fetch('/api/subscribe', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ email })
+			});
+
+			const data = await response.json();
+
+			if (response.ok) {
+				setSubscribeMessage('Successfully subscribed! Check your email tomorrow.');
+				setEmail('');
+			} else {
+				setSubscribeMessage(data.error || 'Subscription failed');
+			}
+		} catch (error) {
+			setSubscribeMessage('Network error. Please try again.');
+		} finally {
+			setIsSubscribing(false);
+		}
 	};
 
 	return (
@@ -64,11 +87,17 @@ const Index = () => {
 								<Button
 									type="submit"
 									size="lg"
+									disabled={isSubscribing}
 									className="gap-2 bg-secondary hover:bg-secondary/90 text-secondary-foreground h-12 px-6 font-semibold shrink-0"
 								>
-									Start Free Trial <ArrowRight className="h-4 w-4" />
+									{isSubscribing ? 'Subscribing...' : 'Start Free Trial'} <ArrowRight className="h-4 w-4" />
 								</Button>
 							</form>
+							{subscribeMessage && (
+								<p className={`mt-4 text-center ${subscribeMessage.includes('Successfully') ? 'text-green-600' : 'text-red-600'}`}>
+									{subscribeMessage}
+								</p>
+							)}
 
 							{/* Stats inline */}
 							<div className="mt-8 flex items-center gap-6 flex-wrap">
@@ -461,11 +490,17 @@ const Index = () => {
 										<Button
 											type="submit"
 											size="lg"
+											disabled={isSubscribing}
 											className="w-full gap-2 bg-secondary hover:bg-secondary/90 text-secondary-foreground h-12 font-semibold"
 										>
-											✦ Start 7 Days Free Trial <ArrowRight className="h-4 w-4" />
+											{isSubscribing ? 'Subscribing...' : '✦ Start 7 Days Free Trial'} <ArrowRight className="h-4 w-4" />
 										</Button>
 									</form>
+									{subscribeMessage && (
+										<p className={`text-sm text-center ${subscribeMessage.includes('Successfully') ? 'text-green-400' : 'text-red-400'}`}>
+											{subscribeMessage}
+										</p>
+									)}
 									<p className="text-[11px] text-white/40 leading-relaxed">
 										🔒 No spam. Unsubscribe anytime. First email tomorrow at 6 AM.
 									</p>

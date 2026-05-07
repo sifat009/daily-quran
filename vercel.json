@@ -1,9 +1,4 @@
 {
-	"functions": {
-		"api/**/*.ts": {
-			"runtime": "@vercel/node"
-		}
-	},
 	"crons": [
 		{
 			"path": "/api/send-daily-ayah",

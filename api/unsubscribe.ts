@@ -1,7 +1,18 @@
 import { createClient } from '@supabase/supabase-js';
-import type { VercelRequest, VercelResponse } from '@vercel/node';
+import type { IncomingMessage, ServerResponse } from 'http';
 
 const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+
+type VercelRequest = IncomingMessage & {
+  body?: any;
+  query?: Record<string, string | string[]>;
+};
+
+type VercelResponse = ServerResponse & {
+  json: (body: any) => VercelResponse;
+  send: (body: any) => VercelResponse;
+  status: (statusCode: number) => VercelResponse;
+};
 
 export default async function handler(request: VercelRequest, response: VercelResponse) {
 	if (request.method !== 'GET') {

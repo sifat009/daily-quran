@@ -1,7 +1,18 @@
 import { createClient } from '@supabase/supabase-js';
-import type { VercelRequest, VercelResponse } from '@vercel/node';
+import type { IncomingMessage, ServerResponse } from 'http';
 import { Resend } from 'resend';
 import { surahs } from '../src/data/surahs';
+
+type VercelRequest = IncomingMessage & {
+  body?: any;
+  query?: Record<string, string | string[]>;
+};
+
+type VercelResponse = ServerResponse & {
+  json: (body: any) => VercelResponse;
+  send: (body: any) => VercelResponse;
+  status: (statusCode: number) => VercelResponse;
+};
 
 const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 
@@ -17,13 +28,23 @@ interface QuranVerse {
 	};
 }
 
+interface Subscriber {
+	id: string;
+	email: string;
+	created_at: string;
+	is_active: boolean;
+	current_surah_number: number;
+	current_ayah_number: number;
+	unsubscribe_token: string;
+}
+
 export default async function handler(request: VercelRequest, response: VercelResponse) {
 	if (request.method !== 'POST') {
 		return response.status(405).json({ error: 'Method not allowed' });
 	}
 
 	try {
-		const { data: subscribers, error: subError } = await supabase.from('subscribers').select('*').eq('is_active', true);
+		const { data: subscribers, error: subError } = await supabase.from('subscribers').select('*').eq('is_active', true) as { data: Subscriber[] | null; error: any };
 
 		if (subError) throw subError;
 
@@ -112,7 +133,7 @@ async function fetchAyahData(surah: number, ayah: number): Promise<QuranVerse> {
 	};
 }
 
-async function sendAyahEmail(subscriber: any, ayahData: QuranVerse) {
+async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse) {
 	const unsubscribeUrl = `${process.env.VERCEL_URL || 'http://localhost:3000'}/api/unsubscribe?token=${subscriber.unsubscribe_token}`;
 
 	const emailHtml = `

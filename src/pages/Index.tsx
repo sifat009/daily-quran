@@ -580,7 +580,7 @@ const Index = () => {
 								},
 								{
 									q: 'What time will I receive the email?',
-									a: 'Emails are sent at 6:00 AM in your local timezone (configurable in your dashboard after signing up).',
+									a: 'Emails are sent at 6:00 AM UTC every morning. Local timezone support is coming soon!',
 								},
 								{
 									q: 'Can I browse the Quran without subscribing?',

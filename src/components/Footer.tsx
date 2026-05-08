@@ -32,16 +32,16 @@ const Footer = () => (
 					</div>
 				</div>
 				<div>
-					<h4 className="font-semibold mb-3 text-white text-sm">Account</h4>
+					<h4 className="font-semibold mb-3 text-white text-sm">Community</h4>
 					<div className="flex flex-col gap-2 text-sm text-white/50">
-						<Link to="/login" className="hover:text-white transition-colors">
-							Log in
+						<Link to="/#faq" className="hover:text-white transition-colors">
+							FAQs
 						</Link>
-						<Link to="/signup" className="hover:text-white transition-colors">
-							Sign up
+						<Link to="/" className="hover:text-white transition-colors">
+							Success Stories
 						</Link>
-						<Link to="/dashboard" className="hover:text-white transition-colors">
-							Dashboard
+						<Link to="/" className="hover:text-white transition-colors">
+							Contact Us
 						</Link>
 					</div>
 				</div>

@@ -23,7 +23,7 @@ const Index = () => {
 			const response = await fetch('/api/subscribe', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ email })
+				body: JSON.stringify({ email }),
 			});
 
 			const data = await response.json();
@@ -94,7 +94,7 @@ const Index = () => {
 								</Button>
 							</form>
 							{subscribeMessage && (
-								<p className={`mt-4 text-center ${subscribeMessage.includes('Successfully') ? 'text-green-600' : 'text-red-600'}`}>
+								<p className={`mt-4 ${subscribeMessage.includes('Successfully') ? 'text-green-600' : 'text-red-600'}`}>
 									{subscribeMessage}
 								</p>
 							)}
@@ -493,11 +493,14 @@ const Index = () => {
 											disabled={isSubscribing}
 											className="w-full gap-2 bg-secondary hover:bg-secondary/90 text-secondary-foreground h-12 font-semibold"
 										>
-											{isSubscribing ? 'Subscribing...' : '✦ Start 7 Days Free Trial'} <ArrowRight className="h-4 w-4" />
+											{isSubscribing ? 'Subscribing...' : '✦ Start 7 Days Free Trial'}{' '}
+											<ArrowRight className="h-4 w-4" />
 										</Button>
 									</form>
 									{subscribeMessage && (
-										<p className={`text-sm text-center ${subscribeMessage.includes('Successfully') ? 'text-green-400' : 'text-red-400'}`}>
+										<p
+											className={`text-sm text-center ${subscribeMessage.includes('Successfully') ? 'text-green-400' : 'text-red-400'}`}
+										>
 											{subscribeMessage}
 										</p>
 									)}

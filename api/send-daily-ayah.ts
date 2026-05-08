@@ -182,7 +182,7 @@ async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse) {
   `;
 
 	await resend.emails.send({
-		from: 'Daily Quran <daily@yourdomain.com>',
+		from: process.env.EMAIL_FROM || 'Daily Quran <onboarding@resend.dev>',
 		to: subscriber.email,
 		subject: `Your Daily Ayah - ${subscriber.current_surah_number}:${subscriber.current_ayah_number}`,
 		html: emailHtml,

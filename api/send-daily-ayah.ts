@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { Resend } from 'resend';
-import { surahs } from '../src/data/surahs';
+import { surahs } from './_data/surahs';
 
 export const config = {
   maxDuration: 60,

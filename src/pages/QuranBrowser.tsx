@@ -6,7 +6,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { surahs, type Surah } from '@/data/surahs';
+import { surahs, type Surah } from '../../api/_data/surahs';
 
 interface Ayah {
 	number: number;

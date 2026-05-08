@@ -1,51 +1,60 @@
 import { createClient } from '@supabase/supabase-js';
-import type { IncomingMessage, ServerResponse } from 'http';
 
-const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+const supabase = createClient(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
-type VercelRequest = IncomingMessage & {
-  body?: any;
-  query?: Record<string, string | string[]>;
-};
+export default async function handler(req: Request) {
+  if (req.method !== 'POST') {
+    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
+      status: 405,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
 
-type VercelResponse = ServerResponse & {
-  json: (body: any) => VercelResponse;
-  send: (body: any) => VercelResponse;
-  status: (statusCode: number) => VercelResponse;
-};
+  try {
+    const { email } = await req.json();
 
-export default async function handler(request: VercelRequest, response: VercelResponse) {
-	if (request.method !== 'POST') {
-		return response.status(405).json({ error: 'Method not allowed' });
-	}
+    if (!email || !email.includes('@')) {
+      return new Response(JSON.stringify({ error: 'Valid email required' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
 
-	try {
-		const { email } = request.body;
+    const unsubscribeToken = crypto.randomUUID();
 
-		if (!email || !email.includes('@')) {
-			return response.status(400).json({ error: 'Valid email required' });
-		}
+    const { data, error } = await supabase
+      .from('subscribers')
+      .insert([{ email, unsubscribe_token: unsubscribeToken }])
+      .select();
 
-		const unsubscribeToken = crypto.randomUUID();
+    if (error) {
+      if (error.code === '23505') {
+        return new Response(JSON.stringify({ error: 'Email already subscribed' }), {
+          status: 409,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+      throw error;
+    }
 
-		const { data, error } = await supabase
-			.from('subscribers')
-			.insert([{ email, unsubscribe_token: unsubscribeToken }])
-			.select();
-
-		if (error) {
-			if (error.code === '23505') {
-				return response.status(409).json({ error: 'Email already subscribed' });
-			}
-			throw error;
-		}
-
-		return response.status(200).json({
-			message: 'Successfully subscribed! Check your email tomorrow.',
-			subscriber: data[0],
-		});
-	} catch (error) {
-		console.error('Subscription error:', error);
-		return response.status(500).json({ error: 'Internal server error' });
-	}
+    return new Response(JSON.stringify({
+      message: 'Successfully subscribed! Check your email tomorrow.',
+      subscriber: data?.[0],
+    }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (error: any) {
+    console.error('Subscription error:', error);
+    return new Response(JSON.stringify({ 
+      error: 'Internal server error',
+      details: error.message 
+    }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
 }

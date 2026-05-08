@@ -1,45 +1,46 @@
 import { createClient } from '@supabase/supabase-js';
-import type { IncomingMessage, ServerResponse } from 'http';
 
-const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+const supabase = createClient(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
-type VercelRequest = IncomingMessage & {
-  body?: any;
-  query?: Record<string, string | string[]>;
-};
+export default async function handler(req: Request) {
+  if (req.method !== 'GET') {
+    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
+      status: 405,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
 
-type VercelResponse = ServerResponse & {
-  json: (body: any) => VercelResponse;
-  send: (body: any) => VercelResponse;
-  status: (statusCode: number) => VercelResponse;
-};
+  try {
+    const { searchParams } = new URL(req.url);
+    const token = searchParams.get('token');
 
-export default async function handler(request: VercelRequest, response: VercelResponse) {
-	if (request.method !== 'GET') {
-		return response.status(405).json({ error: 'Method not allowed' });
-	}
+    if (!token) {
+      return new Response(JSON.stringify({ error: 'Token required' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
 
-	try {
-		const token = request.query.token as string;
+    const { data, error } = await supabase
+      .from('subscribers')
+      .update({ is_active: false })
+      .eq('unsubscribe_token', token)
+      .select();
 
-		if (!token) {
-			return response.status(400).json({ error: 'Token required' });
-		}
+    if (error) throw error;
 
-		const { data, error } = await supabase
-			.from('subscribers')
-			.update({ is_active: false })
-			.eq('unsubscribe_token', token)
-			.select();
+    if (!data || data.length === 0) {
+      return new Response(JSON.stringify({ error: 'Invalid token' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
 
-		if (error) throw error;
-
-		if (!data || data.length === 0) {
-			return response.status(404).json({ error: 'Invalid token' });
-		}
-
-		return response.send(
-			`
+    return new Response(
+      `
       <!DOCTYPE html>
       <html>
         <head>
@@ -55,10 +56,20 @@ export default async function handler(request: VercelRequest, response: VercelRe
           <p>You can always subscribe again from our website.</p>
         </body>
       </html>
-    `
-		);
-	} catch (error) {
-		console.error('Unsubscribe error:', error);
-		return response.status(500).json({ error: 'Internal server error' });
-	}
+    `,
+      {
+        status: 200,
+        headers: { 'Content-Type': 'text/html' },
+      }
+    );
+  } catch (error: any) {
+    console.error('Unsubscribe error:', error);
+    return new Response(JSON.stringify({ 
+      error: 'Internal server error',
+      details: error.message 
+    }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
 }

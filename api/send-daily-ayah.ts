@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
 import { surahs } from './_data/surahs.js';
 
 export const config = {
@@ -8,7 +8,15 @@ export const config = {
 
 const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 
-const resend = new Resend(process.env.RESEND_API_KEY!);
+const transporter = nodemailer.createTransport({
+	host: 'smtp.gmail.com',
+	port: 465,
+	secure: true,
+	auth: {
+		user: process.env.SMTP_USER,
+		pass: process.env.SMTP_PASS,
+	},
+});
 
 interface QuranVerse {
 	number: number;
@@ -500,14 +508,14 @@ async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse) {
 </html>
 `;
 
-	const { error } = await resend.emails.send({
-		from: process.env.EMAIL_FROM || 'Daily Quran <onboarding@resend.dev>',
-		to: subscriber.email,
-		subject: `Your Daily Ayah - ${surahName} ${subscriber.current_surah_number}:${subscriber.current_ayah_number}`,
-		html: emailHtml,
-	});
-
-	if (error) {
-		throw new Error(`Resend error: ${error.message}`);
+	try {
+		await transporter.sendMail({
+			from: process.env.EMAIL_FROM || `"Daily Quran" <${process.env.SMTP_USER}>`,
+			to: subscriber.email,
+			subject: `Your Daily Ayah - ${surahName} ${subscriber.current_surah_number}:${subscriber.current_ayah_number}`,
+			html: emailHtml,
+		});
+	} catch (error: any) {
+		throw new Error(`SMTP error: ${error.message}`);
 	}
 }

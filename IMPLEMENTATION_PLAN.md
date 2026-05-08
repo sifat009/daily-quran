@@ -36,7 +36,7 @@
 - [x] Updated Footer and FAQ to reflect Zero-Auth model
 
 ### Phase 4: Environment & Dependencies ✅
-- [x] Install `@supabase/supabase-js` and `resend`
+- [x] Install `@supabase/supabase-js` and `nodemailer`
 - [x] Create `.env.local` with necessary secrets
 - [x] Parameterize `EMAIL_FROM` in API
 
@@ -44,18 +44,20 @@
 
 ## 3. Phase 5: Publication & Launch (Remaining Tasks)
 
-### 1. Domain & Email Verification (Resend)
-- [ ] **Verify Domain**: Add DNS records (SPF, DKIM, DMARC) in your domain provider to verify your domain in Resend.
-- [ ] **Update `EMAIL_FROM`**: Once verified, update the `EMAIL_FROM` environment variable in Vercel from the test email to your professional address (e.g., `Daily Quran <daily@yourdomain.com>`).
+### 1. Google SMTP Setup
+- [ ] **Generate App Password**: Go to Google Account > Security > 2-Step Verification > App Passwords. Generate a password for "Mail".
+- [ ] **Update `SMTP_USER` & `SMTP_PASS`**: Add your Gmail and the App Password to Vercel environment variables.
+- [ ] **Update `EMAIL_FROM`**: Set your sender name and email (e.g., `"Daily Quran" <your-email@gmail.com>`).
 
 ### 2. Vercel Deployment & Config
 - [ ] **Import Project**: Connect the GitHub repository to Vercel.
 - [ ] **Set Environment Variables**:
+    - `SMTP_USER`
+    - `SMTP_PASS`
+    - `EMAIL_FROM`
+    - `VERCEL_URL` (Set to your production domain)
     - `SUPABASE_URL`
     - `SUPABASE_SERVICE_ROLE_KEY`
-    - `RESEND_API_KEY`
-    - `VERCEL_URL` (Set to your production domain)
-    - `EMAIL_FROM`
 - [ ] **Explicit Runtimes**: Ensure `vercel.json` is fully configured to handle the serverless function runtimes.
 
 ### 3. SEO & Metadata Optimization
@@ -74,9 +76,9 @@
 
 ## 4. Production Checklist
 
-- [ ] Domain verified in Resend (DNS records green)
+- [ ] Gmail App Password generated
 - [ ] Environment variables set in Vercel dashboard
-- [ ] `EMAIL_FROM` updated to production address
+- [ ] `SMTP_USER` and `SMTP_PASS` confirmed
 - [ ] `VERCEL_URL` points to the final domain
 - [ ] PWA Manifest and icons added to `public/`
 - [ ] Metadata updated in `index.html`
@@ -90,7 +92,7 @@
 | Decision | Rationale |
 | :--- | :--- |
 | **Zero Authentication** | Maximizes conversion and simplifies the MVP. |
-| **Resend + Vercel Cron** | Best-in-class developer experience for scheduled emails. |
+| **Google SMTP + Vercel Cron** | Cost-effective and reliable for high-deliverability emails. |
 | **Direct Quran API** | Fetches fresh data for every email, avoiding large local data storage. |
 | **POST-only Cron** | Security measure to prevent accidental triggers (Vercel Crons use POST). |
 | **Crypto UUID Tokens** | Secure, unguessable tokens for one-click unsubscriptions. |

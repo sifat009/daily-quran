@@ -165,53 +165,345 @@ async function fetchAyahData(surah: number, ayah: number): Promise<QuranVerse> {
 		},
 	};
 }
-
 async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse) {
 	const unsubscribeUrl = `${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'}/api/unsubscribe?token=${subscriber.unsubscribe_token}`;
+	const surahName = surahs.find((s) => s.number === subscriber.current_surah_number)?.englishName || 'Surah';
 
 	const emailHtml = `
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <meta charset="utf-8">
-        <title>Your Daily Ayah</title>
-        <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-          .arabic { font-size: 24px; text-align: right; direction: rtl; font-family: 'Amiri', serif; }
-          .translation { margin: 20px 0; }
-          .footer { margin-top: 30px; font-size: 12px; color: #666; }
-          .unsubscribe { margin-top: 20px; }
-        </style>
-      </head>
-      <body>
-        <h1>Your Daily Ayah</h1>
-        <div class="arabic">${ayahData.text}</div>
-        <div class="translation">
-          <h3>English Translation:</h3>
-          <p>${ayahData.translation.en.text}</p>
+<!DOCTYPE html>
+<html lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Daily Ayah</title>
+  <!--[if mso]>
+  <noscript>
+    <xml>
+      <o:OfficeDocumentSettings>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+    </xml>
+  </noscript>
+  <![endif]-->
+  <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: #1a1a1a;
+      margin: 0;
+      padding: 0;
+      background-color: #ffffff;
+    }
+    .container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      background: #ffffff;
+    }
+    .header {
+      padding: 24px 0;
+    }
+    .greeting {
+      font-size: 15px;
+      color: #333333;
+      margin-bottom: 20px;
+      padding: 0 10px;
+    }
+    .ayah-card {
+      background-color: #fdfaf2; /* Light cream/yellowish */
+      border-radius: 16px;
+      padding: 40px 24px;
+      text-align: center;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .badge-secondary {
+      display: inline-block;
+      padding: 4px 16px;
+      border: 1px solid #f59e0b; /* Gold border */
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #d97706; /* Darker gold */
+      margin-bottom: 24px;
+      background-color: #ffffff;
+    }
+    .arabic {
+      font-family: 'Amiri', serif;
+      font-size: 32px;
+      line-height: 2;
+      color: #1a1a1a;
+      direction: rtl;
+      margin: 0 0 24px 0;
+    }
+    .divider {
+      text-align: center;
+      margin-top: 10px;
+    }
+    .divider-line {
+      display: inline-block;
+      width: 40px;
+      height: 1px;
+      background-color: #f59e0b;
+      vertical-align: middle;
+      opacity: 0.3;
+    }
+    .divider-icon {
+      display: inline-block;
+      color: #d97706;
+      font-size: 14px;
+      margin: 0 10px;
+      vertical-align: middle;
+      opacity: 0.6;
+    }
+    .translation-container {
+      width: 100%;
+      margin-bottom: 24px;
+    }
+    .translation-box {
+      background-color: #f2f7f4; /* Very light green */
+      border: 1px solid #d1e3d6; /* Light green border */
+      border-radius: 12px;
+      padding: 20px;
+      text-align: left;
+    }
+    .translation-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #1b5e20; /* Dark green */
+      margin-bottom: 12px;
+    }
+    .translation-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background-color: #1b5e20;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+    .translation-text-en {
+      font-size: 14px;
+      font-style: italic;
+      color: #444444;
+      margin: 0;
+      line-height: 1.6;
+    }
+    .translation-text-bn {
+      font-size: 15px;
+      color: #444444;
+      margin: 0;
+      line-height: 1.6;
+    }
+    .audio-box {
+      background-color: #fdfaf2;
+      border: 1px solid #fde68a;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: left;
+      margin-bottom: 32px;
+      text-decoration: none;
+      display: block;
+    }
+    .audio-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #d97706;
+      margin-bottom: 16px;
+    }
+    .audio-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background-color: #d97706;
+      border-radius: 50%;
+      margin-right: 4px;
+    }
+    .player-row {
+      display: table;
+      width: 100%;
+    }
+    .play-btn-cell {
+      width: 48px;
+      vertical-align: middle;
+    }
+    .play-btn {
+      width: 36px;
+      height: 36px;
+      background-color: #1b5e20;
+      border-radius: 50%;
+      display: inline-block;
+      text-align: center;
+      line-height: 36px;
+      color: white;
+      font-size: 12px;
+    }
+    .progress-cell {
+      vertical-align: middle;
+      padding: 0 16px;
+    }
+    .progress-track {
+      width: 100%;
+      height: 6px;
+      background-color: #d1d5db;
+      border-radius: 3px;
+    }
+    .progress-fill {
+      width: 33%;
+      height: 6px;
+      background-color: #86efac;
+      border-radius: 3px;
+    }
+    .time-cell {
+      width: 30px;
+      vertical-align: middle;
+      font-size: 12px;
+      color: #6b7280;
+      text-align: right;
+    }
+    .footer-author {
+      text-align: center;
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 40px;
+    }
+    .unsub-text {
+      text-align: center;
+      font-size: 11px;
+      color: #9ca3af;
+      margin-top: 40px;
+    }
+    .unsub-text a {
+      color: #6b7280;
+      text-decoration: underline;
+    }
+
+    /* Responsive grid classes */
+    .col-half {
+      width: 48%;
+      display: inline-block;
+      vertical-align: top;
+    }
+    .col-spacer {
+      width: 3%;
+      display: inline-block;
+    }
+    @media only screen and (max-width: 600px) {
+      .col-half {
+        width: 100% !important;
+        display: block !important;
+        margin-bottom: 16px !important;
+      }
+      .col-spacer {
+        display: none !important;
+      }
+      .ayah-card {
+        padding: 30px 16px;
+      }
+      .arabic {
+        font-size: 26px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="greeting">Assalamu Alaikum 🤲 Here is your Ayah for today</div>
+
+      <!-- Ayah Card -->
+      <div class="ayah-card">
+        <div class="badge-secondary">SURAH ${subscriber.current_surah_number} · VERSE ${subscriber.current_ayah_number}</div>
+        <p class="arabic" dir="rtl">${ayahData.text}</p>
+        <div class="divider">
+          <span class="divider-line"></span>
+          <span class="divider-icon">☪</span>
+          <span class="divider-line"></span>
         </div>
-        <div class="translation">
-          <h3>বাংলা অনুবাদ (Bangla Translation):</h3>
-          <p>${ayahData.translation.bn.text}</p>
-        </div>
-        <div class="translation">
-          <h3>Audio Recitation:</h3>
-          <p><a href="${ayahData.audio}">Listen to this Ayah</a></p>
-        </div>
-        <div class="footer">
-          <p>This is Ayah ${ayahData.number} from Surah ${subscriber.current_surah_number} of your personalized Quran journey.</p>
-          <div class="unsubscribe">
-            <p><a href="${unsubscribeUrl}">Unsubscribe from daily emails</a></p>
+      </div>
+
+      <!-- Translations Grid -->
+      <div class="translation-container">
+        <!--[if mso]>
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+        <td width="48%" valign="top">
+        <![endif]-->
+        
+        <div class="col-half translation-box">
+          <div class="translation-label">
+            <span class="translation-dot"></span>ENGLISH TRANSLATION
           </div>
+          <p class="translation-text-en">"${ayahData.translation.en.text}"</p>
         </div>
-      </body>
-    </html>
-  `;
+        
+        <!--[if mso]>
+        </td>
+        <td width="4%"></td>
+        <td width="48%" valign="top">
+        <![endif]-->
+        <div class="col-spacer"></div>
+        
+        <div class="col-half translation-box">
+          <div class="translation-label">
+            <span class="translation-dot"></span>বাংলা অনুবাদ
+          </div>
+          <p class="translation-text-bn">${ayahData.translation.bn.text}</p>
+        </div>
+        
+        <!--[if mso]>
+        </td>
+        </tr>
+        </table>
+        <![endif]-->
+      </div>
+
+      <!-- Audio Player -->
+      <a href="${ayahData.audio}" class="audio-box">
+        <div class="audio-label">
+          <span class="audio-dot"></span> 🎧 AUDIO RECITATION
+        </div>
+        <table class="player-row" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td class="play-btn-cell">
+              <div class="play-btn">▶</div>
+            </td>
+            <td class="progress-cell">
+              <div class="progress-track">
+                <div class="progress-fill"></div>
+              </div>
+            </td>
+            <td class="time-cell">0:42</td>
+          </tr>
+        </table>
+      </a>
+
+      <!-- Footer Info -->
+      <div class="footer-author">
+        — Sheikh Mishary Rashid Alafasy · ${surahName}
+      </div>
+
+      <div class="unsub-text">
+        This daily Ayah was sent to ${subscriber.email}.<br>
+        <a href="${unsubscribeUrl}">Unsubscribe</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+`;
 
 	const { error } = await resend.emails.send({
 		from: process.env.EMAIL_FROM || 'Daily Quran <onboarding@resend.dev>',
 		to: subscriber.email,
-		subject: `Your Daily Ayah - ${subscriber.current_surah_number}:${ayahData.number}`,
+		subject: `Your Daily Ayah - ${surahName} ${subscriber.current_surah_number}:${subscriber.current_ayah_number}`,
 		html: emailHtml,
 	});
 

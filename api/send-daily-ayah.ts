@@ -205,7 +205,7 @@ async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse) {
     }
     .container {
       width: 100%;
-      max-width: 600px;
+      max-width: 800px;
       margin: 0 auto;
       background: #ffffff;
     }
@@ -403,7 +403,7 @@ async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse) {
       width: 3%;
       display: inline-block;
     }
-    @media only screen and (max-width: 600px) {
+    @media only screen and (max-width: 768px) {
       .col-half {
         width: 100% !important;
         display: block !important;
@@ -432,13 +432,13 @@ async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse) {
         <p class="arabic" dir="rtl">${ayahData.text}</p>
         <div class="divider">
           <span class="divider-line"></span>
-          <span class="divider-icon">☪</span>
+          <span class="divider-icon" style="font-family: Arial, sans-serif;">☪&#xFE0E;</span>
           <span class="divider-line"></span>
         </div>
       </div>
 
       <!-- Translations Grid -->
-      <div class="translation-container">
+      <div class="translation-container" style="font-size: 0; text-align: center;">
         <!--[if mso]>
         <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
@@ -481,7 +481,9 @@ async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse) {
         <table class="player-row" cellpadding="0" cellspacing="0" border="0">
           <tr>
             <td class="play-btn-cell">
-              <div class="play-btn">▶</div>
+              <div class="play-btn">
+                <div style="display: inline-block; width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 8px solid white; margin-left: 3px; vertical-align: middle;"></div>
+              </div>
             </td>
             <td class="progress-cell">
               <div class="progress-track">

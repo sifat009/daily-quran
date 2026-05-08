@@ -445,11 +445,13 @@ async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse) {
         <td width="48%" valign="top">
         <![endif]-->
         
-        <div class="col-half translation-box">
-          <div class="translation-label">
-            <span class="translation-dot"></span>ENGLISH TRANSLATION
+        <div class="col-half">
+          <div class="translation-box">
+            <div class="translation-label">
+              <span class="translation-dot"></span>ENGLISH TRANSLATION
+            </div>
+            <p class="translation-text-en">"${ayahData.translation.en.text}"</p>
           </div>
-          <p class="translation-text-en">"${ayahData.translation.en.text}"</p>
         </div>
         
         <!--[if mso]>
@@ -459,11 +461,13 @@ async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse) {
         <![endif]-->
         <div class="col-spacer"></div>
         
-        <div class="col-half translation-box">
-          <div class="translation-label">
-            <span class="translation-dot"></span>বাংলা অনুবাদ
+        <div class="col-half">
+          <div class="translation-box">
+            <div class="translation-label">
+              <span class="translation-dot"></span>বাংলা অনুবাদ
+            </div>
+            <p class="translation-text-bn">${ayahData.translation.bn.text}</p>
           </div>
-          <p class="translation-text-bn">${ayahData.translation.bn.text}</p>
         </div>
         
         <!--[if mso]>

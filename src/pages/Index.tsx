@@ -8,11 +8,258 @@ import { Badge } from '@/components/ui/badge';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import PricingSection from '@/components/PricingSection';
+import { useLanguage } from '@/hooks/useLanguage';
 
 const Index = () => {
 	const [email, setEmail] = useState('');
 	const [isSubscribing, setIsSubscribing] = useState(false);
 	const [subscribeMessage, setSubscribeMessage] = useState('');
+	const { language } = useLanguage();
+
+	const content = {
+		bn: {
+			heroBadge: 'সবার জন্য ফ্রী সার্ভিস',
+			heroTitle: (
+				<>
+					প্রতিদিন সকালে <span className="italic text-secondary">কুরআনের নূর</span>
+					<br />
+					পৌঁছে যাবে আপনার
+					<br />
+					<span className="text-muted-foreground font-normal italic text-3xl md:text-4xl lg:text-5xl">
+						ইমেইল ইনবক্সে।
+					</span>
+				</>
+			),
+			heroDesc:
+				'প্রতিদিন একটি করে আয়াত। আরবী টেক্সট, বাংলা ও ইংরেজি অনুবাদ এবং অডিও তেলাওয়াতসহ প্রতিদিন ভোর ৬টায় আপনার ইমেইলে।',
+			placeholder: 'আপনার ইমেইল এড্রেস দিন',
+			btnSubscribe: 'যুক্ত হোন এখনই',
+			btnSubscribing: 'যুক্ত করা হচ্ছে...',
+			stats: [
+				{ value: '৬,২৩৬', label: 'আয়াত' },
+				{ value: '১১৪', label: 'সূরা' },
+				{ value: '২,০০০+', label: 'সাবস্ক্রাইবার' },
+			],
+			previewBadge: '✦ প্রতিদিন ভোর ৬টায়',
+			todayAyah: 'আজকের আয়াত',
+			surahName: 'সূরা বাকারা',
+			ayahNum: 'আয়াত ২৫৫',
+			audioTime: '০:৪২',
+			previewTitle: (
+				<>
+					প্রতিদিন <span className="italic text-secondary">ভোর ৬টায়</span> আপনার ইমেইলে
+				</>
+			),
+			previewDesc: 'কুরআনের নূর ছড়িয়ে পড়ুক আপনার সারা দিনে।',
+			inbox: 'ইনবক্স',
+			greeting: 'আসসালামু আলাইকুম 🤲 আজকের আয়াতটি নিচে দেওয়া হলো',
+			featuresTitle: 'আপনি যা পাবেন',
+			featuresDesc: 'কুরআনের ১১৪টি সূরার একটি সুশৃঙ্খল যাত্রা — প্রতিদিন সকালে।',
+			features: [
+				{
+					num: '০১',
+					icon: Mail,
+					title: 'প্রতিদিন সকালে একটি আয়াত',
+					desc: 'প্রতিদিন ভোর ৬টায় আপনার ইমেইলে কুরআনের একটি আয়াত পৌঁছে যাবে — আরবী, অনুবাদ এবং অডিওসহ।',
+				},
+				{
+					num: '০২',
+					icon: BookOpen,
+					title: 'সূরা অনুযায়ী ধারাবাহিকতা',
+					desc: 'আমরা ধারাবাহিকভাবে প্রতিটি সূরা সম্পন্ন করি যাতে প্রতিটি আয়াতের গুরুত্ব অনুধাবন করা যায়।',
+				},
+				{
+					num: '০৩',
+					icon: Headphones,
+					title: 'আরবী, অনুবাদ এবং অডিও',
+					desc: 'আরবী টেক্সট, বাংলা ও ইংরেজি অনুবাদ এবং শায়খ মিশারি আল-আফাসীর কণ্ঠে তেলাওয়াত — সব এক ইমেইলে।',
+				},
+			],
+			ctaBadge: 'আজই যুক্ত হোন',
+			ctaTitle: (
+				<>
+					আপনার দ্বীনি যাত্রা শুরু করুন
+					<br />
+					<span className="italic text-secondary">প্রতিদিন একটি আয়াত দিয়ে</span>
+				</>
+			),
+			ctaDesc: '১১৪টি সূরার ৬২৩৬টি আয়াত ধারাবাহিকভাবে আপনার ইনবক্সে। সম্পূর্ণ ফ্রী এবং সবসময় বিজ্ঞাপন মুক্ত।',
+			spam: '🔒 কোনো স্প্যাম হবে না। যেকোনো সময় আনসাবস্ক্রাইব করা যাবে।',
+			testimonialsTitle: (
+				<>
+					সবাই যা <span className="italic text-secondary">বলছেন</span>
+				</>
+			),
+			testimonialsDesc: 'আমাদের সাবস্ক্রাইবারদের কিছু মতামত।',
+			testimonials: [
+				{
+					name: 'আয়েশা আর.',
+					text: 'প্রতিদিন সকালে একটি আয়াত দিয়ে দিন শুরু করা আমার মনে প্রশান্তি এনে দিয়েছে। বাংলা অনুবাদটি সত্যিই খুব চমৎকার!',
+					loc: 'ঢাকা, বাংলাদেশ',
+				},
+				{
+					name: 'ওমর কে.',
+					text: 'আমি অনেক অ্যাপ ব্যবহার করেছি কিন্তু ইমেইলের মাধ্যমে এই সেবাটি সবচেয়ে সহজ এবং নিয়মিত কুরআন পড়ার সুযোগ করে দেয়।',
+					loc: 'চট্টগ্রাম, বাংলাদেশ',
+				},
+				{
+					name: 'ফাতিমা এইচ.',
+					text: 'মিশারি রাশিদ আল-আফাসীর তেলাওয়াত খুব সুন্দর। প্রতিদিন সকালে আমি এই ইমেইলের অপেক্ষায় থাকি।',
+					loc: 'সিলেট, বাংলাদেশ',
+				},
+			],
+			faqTitle: (
+				<>
+					সাধারণ কিছু <span className="italic text-secondary">জিজ্ঞাসা</span>
+				</>
+			),
+			faqDesc: 'ডেইলি কুরআন সম্পর্কে আপনার মনে থাকা কিছু প্রশ্নের উত্তর।',
+			faqs: [
+				{
+					q: 'ডেইলি কুরআন কি ফ্রী?',
+					a: 'হ্যাঁ, ডেইলি কুরআন সবার জন্য একটি ফ্রী সার্ভিস। আমরা আপনাদের সহযোগিতার (সাদাকা) মাধ্যমে এই সেবাটি সচল রাখি।',
+				},
+				{
+					q: 'কোন অনুবাদ ব্যবহার করা হয়?',
+					a: 'ইংরেজি অনুবাদের জন্য সহীহ ইন্টারন্যাশনাল এবং বাংলা অনুবাদের জন্য ড. আবু বকর মুহাম্মাদ যাকারিয়ার অনুবাদ ব্যবহার করা হয়।',
+				},
+				{
+					q: 'তেলাওয়াতকারী কে?',
+					a: 'সবগুলো আয়াতের অডিও তেলাওয়াত বিশ্ববিখ্যাত ক্বারী শায়খ মিশারি রাশিদ আল-আফাসীর কণ্ঠে।',
+				},
+				{
+					q: 'প্রতিদিন কখন ইমেইল পাবো?',
+					a: 'প্রতিদিন ভোর ৬টায় (বাংলাদেশ সময়) আপনার ইমেইল ইনবক্সে আয়াত পৌঁছে যাবে ইনশাআল্লাহ।',
+				},
+				{
+					q: 'সাবস্ক্রাইব না করেও কি কুরআন পড়া যাবে?',
+					a: 'অবশ্যই! আমাদের "ব্রাউজ কুরআন" পেজে গিয়ে আপনি ১১৪টি সূরার যেকোনো আয়াত যেকোনো সময় পড়তে পারবেন।',
+				},
+			],
+		},
+		en: {
+			heroBadge: 'Free Service for Everyone',
+			heroTitle: (
+				<>
+					Your daily dose of <span className="italic text-secondary">Divine Clarity</span>
+					<br />
+					delivered to your
+					<br />
+					<span className="text-muted-foreground font-normal italic text-3xl md:text-4xl lg:text-5xl">
+						Email Inbox.
+					</span>
+				</>
+			),
+			heroDesc:
+				'One Ayah every morning. Arabic text, English & Bangla translations, and audio recitation. Every morning at 6 AM.',
+			placeholder: 'Enter your email address',
+			btnSubscribe: 'Start Today',
+			btnSubscribing: 'Subscribing...',
+			stats: [
+				{ value: '6,236', label: 'Ayahs' },
+				{ value: '114', label: 'Surahs' },
+				{ value: '2,000+', label: 'Subscribers' },
+			],
+			previewBadge: '✦ Every morning at 6 AM',
+			todayAyah: "Today's Ayah",
+			surahName: 'Surah Al-Baqarah',
+			ayahNum: 'Verse 255',
+			audioTime: '0:42',
+			previewTitle: (
+				<>
+					A beautiful morning <span className="italic text-secondary">Ritual</span>
+				</>
+			),
+			previewDesc: 'Start your day with the guidance of the Quran.',
+			inbox: 'Inbox',
+			greeting: 'Assalamu Alaikum 🤲 Here is your Ayah for today',
+			featuresTitle: "What You'll Receive",
+			featuresDesc: 'A structured journey through the entire Quran — one morning at a time.',
+			features: [
+				{
+					num: '01',
+					icon: Mail,
+					title: 'One Ayah, Every Morning',
+					desc: 'A carefully curated Ayah delivered to your inbox at 6 AM — complete with Arabic text, translations, and audio.',
+				},
+				{
+					num: '02',
+					icon: BookOpen,
+					title: 'Surah by Surah, In Order',
+					desc: 'We move through each Surah sequentially so every verse gets its moment. A structured path through the entire Quran.',
+				},
+				{
+					num: '03',
+					icon: Headphones,
+					title: 'Arabic, Translations & Audio',
+					desc: 'Arabic text, English & Bangla translations, and audio by Sheikh Mishary Alafasy — all in one beautiful email.',
+				},
+			],
+			ctaBadge: 'Join Today',
+			ctaTitle: (
+				<>
+					Begin Your Journey
+					<br />
+					<span className="italic text-secondary">One Verse at a Time</span>
+				</>
+			),
+			ctaDesc: '6,236 verses from 114 Surahs delivered to your inbox. 100% free and always ad-free.',
+			spam: '🔒 No spam. Unsubscribe anytime.',
+			testimonialsTitle: (
+				<>
+					Loved by <span className="italic text-secondary">Muslims</span> Worldwide
+				</>
+			),
+			testimonialsDesc: "Here's what our subscribers have to say.",
+			testimonials: [
+				{
+					name: 'Aisha R.',
+					text: 'Starting my day with an Ayah has brought so much peace to my mornings. The experience is beautiful!',
+					loc: 'Dhaka, Bangladesh',
+				},
+				{
+					name: 'Omar K.',
+					text: "I've tried many Quran apps but this email format is the simplest and most consistent way to stay connected.",
+					loc: 'London, UK',
+				},
+				{
+					name: 'Fatima H.',
+					text: 'The audio recitation by Mishary Alafasy is beautiful. I look forward to every morning email.',
+					loc: 'Toronto, Canada',
+				},
+			],
+			faqTitle: (
+				<>
+					Frequently Asked <span className="italic text-secondary">Questions</span>
+				</>
+			),
+			faqDesc: 'Everything you need to know about Daily Quran.',
+			faqs: [
+				{
+					q: 'Is Daily Quran free?',
+					a: 'Yes, Daily Quran is a free service supported by voluntary contributions (Sadaqah) from the community.',
+				},
+				{
+					q: 'Which translation do you use?',
+					a: 'We use Sahih International for English and Dr. Abu Bakr Muhammad Zakaria for Bangla translations.',
+				},
+				{
+					q: 'Who is the reciter?',
+					a: 'All audio recitations are by Sheikh Mishary Rashid Alafasy, one of the most beloved reciters worldwide.',
+				},
+				{
+					q: 'What time will I receive the email?',
+					a: 'Emails are sent at 6:00 AM local time (Bangladesh) to ensure you start your day right.',
+				},
+				{
+					q: 'Can I browse without subscribing?',
+					a: 'Absolutely! Our verse browser is open to everyone. Visit the Browse page to explore all 114 Surahs.',
+				},
+			],
+		},
+	};
+
+	const t = content[language];
 
 	const handleSubscribe = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -29,13 +276,21 @@ const Index = () => {
 			const data = await response.json();
 
 			if (response.ok) {
-				setSubscribeMessage('Successfully subscribed! Check your email tomorrow.');
+				setSubscribeMessage(
+					language === 'bn'
+						? 'সফলভাবে যুক্ত করা হয়েছে! আগামীকাল থেকে ইনশাআল্লাহ ইমেইল পাবেন।'
+						: 'Successfully subscribed! You will receive your first email tomorrow inshaAllah.',
+				);
 				setEmail('');
 			} else {
-				setSubscribeMessage(data.error || 'Subscription failed');
+				setSubscribeMessage(
+					data.error || (language === 'bn' ? 'দুঃখিত, আবার চেষ্টা করুন।' : 'Sorry, please try again.'),
+				);
 			}
 		} catch (error) {
-			setSubscribeMessage('Network error. Please try again.');
+			setSubscribeMessage(
+				language === 'bn' ? 'নেটওয়ার্ক সমস্যা। আবার চেষ্টা করুন।' : 'Network error. Please try again.',
+			);
 		} finally {
 			setIsSubscribing(false);
 		}
@@ -56,28 +311,19 @@ const Index = () => {
 						{/* Left: Text */}
 						<div>
 							<div className="mb-5 inline-flex items-center gap-2 rounded-full border border-secondary/30 bg-secondary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-secondary">
-								<Star className="h-3 w-3" /> 7 Days Free Trial · No Credit Card Required
+								<Star className="h-3 w-3" /> {t.heroBadge}
 							</div>
 							<h1 className="font-display text-4xl font-bold tracking-tight text-foreground md:text-5xl lg:text-6xl leading-[1.15]">
-								Receive the <span className="italic text-secondary">Divine Wisdom</span>
-								<br />
-								of the Quran
-								<br />
-								<span className="text-muted-foreground font-normal italic text-3xl md:text-4xl lg:text-5xl">
-									every single morning.
-								</span>
+								{t.heroTitle}
 							</h1>
-							<p className="mt-6 text-base text-muted-foreground leading-relaxed max-w-lg">
-								One Ayah a day. Arabic text, English &amp; Bangla translations, and audio recitation delivered to your
-								inbox at 6 AM.
-							</p>
+							<p className="mt-6 text-base text-muted-foreground leading-relaxed max-w-lg">{t.heroDesc}</p>
 
 							<form onSubmit={handleSubscribe} className="mt-8 flex flex-col gap-3 sm:flex-row">
 								<div className="relative flex-1 sm:max-w-xs">
 									<Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
 									<Input
 										type="email"
-										placeholder="Enter your email address"
+										placeholder={t.placeholder}
 										value={email}
 										onChange={(e) => setEmail(e.target.value)}
 										required
@@ -90,22 +336,20 @@ const Index = () => {
 									disabled={isSubscribing}
 									className="gap-2 bg-secondary hover:bg-secondary/90 text-secondary-foreground h-12 px-6 font-semibold shrink-0"
 								>
-									{isSubscribing ? 'Subscribing...' : 'Start Free Trial'} <ArrowRight className="h-4 w-4" />
+									{isSubscribing ? t.btnSubscribing : t.btnSubscribe} <ArrowRight className="h-4 w-4" />
 								</Button>
 							</form>
 							{subscribeMessage && (
-								<p className={`mt-4 ${subscribeMessage.includes('Successfully') ? 'text-green-600' : 'text-red-600'}`}>
+								<p
+									className={`mt-4 ${subscribeMessage.includes('Successfully') || subscribeMessage.includes('সফলভাবে') ? 'text-green-600' : 'text-red-600'}`}
+								>
 									{subscribeMessage}
 								</p>
 							)}
 
 							{/* Stats inline */}
 							<div className="mt-8 flex items-center gap-6 flex-wrap">
-								{[
-									{ value: '6,236', label: 'Ayahs' },
-									{ value: '114', label: 'Surahs' },
-									{ value: '2,000+', label: 'Subscribers' },
-								].map((stat) => (
+								{t.stats.map((stat) => (
 									<div key={stat.label} className="flex items-center gap-1.5">
 										<span className="text-lg font-bold text-foreground">{stat.value}</span>
 										<span className="text-xs text-muted-foreground uppercase tracking-wider">{stat.label}</span>
@@ -119,7 +363,7 @@ const Index = () => {
 							<div className="relative">
 								{/* Floating badge */}
 								<div className="absolute -top-3 -left-3 z-10 rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-secondary-foreground shadow-lg">
-									✦ Daily at 6:00 AM
+									{t.previewBadge}
 								</div>
 								<div className="rounded-2xl border border-border bg-card p-8 shadow-xl relative overflow-hidden">
 									{/* Watermark */}
@@ -127,13 +371,13 @@ const Index = () => {
 										☪
 									</span>
 
-									<p className="text-xs font-semibold uppercase tracking-wider text-secondary mb-4">Today's Ayah</p>
+									<p className="text-xs font-semibold uppercase tracking-wider text-secondary mb-4">{t.todayAyah}</p>
 									<div className="rounded-xl bg-[hsl(45,100%,96%)] p-6 text-center space-y-3 mb-4">
 										<Badge
 											variant="outline"
 											className="border-secondary/40 text-secondary text-xs uppercase tracking-wider"
 										>
-											Surah Al-Baqarah · 255
+											{t.surahName} · {t.ayahNum}
 										</Badge>
 										<p className="font-arabic text-xl md:text-2xl leading-[2] text-foreground" dir="rtl">
 											اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ
@@ -160,7 +404,7 @@ const Index = () => {
 										<div className="flex-1 h-1.5 rounded-full bg-border">
 											<div className="h-1.5 w-2/5 rounded-full bg-primary/40" />
 										</div>
-										<span className="text-[10px] text-muted-foreground">0:42</span>
+										<span className="text-[10px] text-muted-foreground">{t.audioTime}</span>
 									</div>
 								</div>
 							</div>
@@ -173,10 +417,8 @@ const Index = () => {
 			<section className="py-16 md:py-24 bg-muted/30">
 				<div className="container">
 					<div className="mx-auto max-w-4xl">
-						<h2 className="mb-2 text-center font-display text-3xl font-bold text-foreground">
-							Your daily dose of <span className="italic text-secondary">divine clarity</span>
-						</h2>
-						<p className="mb-10 text-center text-muted-foreground">A beautiful, daily curated email. Every morning.</p>
+						<h2 className="mb-2 text-center font-display text-3xl font-bold text-foreground">{t.previewTitle}</h2>
+						<p className="mb-10 text-center text-muted-foreground">{t.previewDesc}</p>
 
 						{/* Gmail browser chrome */}
 						<div className="rounded-xl border shadow-2xl overflow-hidden bg-[hsl(220,20%,97%)]">
@@ -297,8 +539,12 @@ const Index = () => {
 									</div>
 
 									<div className="px-6 py-4 bg-white border-b flex items-center gap-3 flex-wrap">
-										<h3 className="text-lg font-normal text-foreground">☪️ Quran — Surah 2, Verse 255</h3>
-										<Badge className="bg-secondary/15 text-secondary border-0 text-xs font-semibold">Daily Quran</Badge>
+										<h3 className="text-lg font-normal text-foreground">
+											☪️ {language === 'bn' ? 'কুরআন — সূরা ২, আয়াত ২৫৫' : 'Quran — Surah 2, Verse 255'}
+										</h3>
+										<Badge className="bg-secondary/15 text-secondary border-0 text-xs font-semibold">
+											{language === 'bn' ? 'ডেইলি কুরআন' : 'Daily Quran'}
+										</Badge>
 									</div>
 
 									<div className="px-6 py-3 bg-white border-b">
@@ -309,21 +555,26 @@ const Index = () => {
 												</div>
 												<div>
 													<p className="text-sm">
-														<span className="font-semibold text-foreground">Daily Quran</span>{' '}
+														<span className="font-semibold text-foreground">
+															{language === 'bn' ? 'ডেইলি কুরআন' : 'Daily Quran'}
+														</span>{' '}
 														<span className="text-muted-foreground">&lt;ayah@dailyquran.com&gt;</span>
 													</p>
-													<p className="text-xs text-muted-foreground">to me · Tue, Mar 4, 2025, 6:00 AM</p>
+													<p className="text-xs text-muted-foreground">
+														to me ·{' '}
+														{language === 'bn' ? 'মঙ্গলবার, ৪ মার্চ, ২০২৫, ৬:০০ AM' : 'Tue, Mar 4, 2025, 6:00 AM'}
+													</p>
 												</div>
 											</div>
 											<Badge variant="outline" className="text-xs hidden sm:inline-flex">
-												📥 Inbox
+												📥 {t.inbox}
 											</Badge>
 										</div>
 									</div>
 
 									<div className="max-h-[520px] overflow-y-auto bg-white">
 										<div className="p-6 space-y-5">
-											<p className="text-sm text-foreground">Assalamu Alaikum 🤲 Here is your Ayah for today</p>
+											<p className="text-sm text-foreground">{t.greeting}</p>
 
 											<div className="rounded-xl bg-[hsl(45,100%,96%)] p-8 text-center space-y-4 relative overflow-hidden">
 												<span className="absolute right-4 top-1/2 -translate-y-1/2 text-[120px] leading-none text-secondary/[0.06] font-arabic select-none pointer-events-none">
@@ -333,7 +584,7 @@ const Index = () => {
 													variant="outline"
 													className="border-secondary/40 text-secondary text-xs uppercase tracking-wider relative z-10"
 												>
-													Surah 2 · Verse 255
+													{t.surahName} · {t.ayahNum}
 												</Badge>
 												<p
 													className="font-arabic text-2xl md:text-3xl leading-[2] text-foreground relative z-10"
@@ -379,7 +630,7 @@ const Index = () => {
 												<div className="flex items-center gap-1.5 mb-2">
 													<span className="h-2 w-2 rounded-full bg-secondary" />
 													<span className="text-xs font-bold uppercase tracking-wider text-secondary">
-														🎧 Audio Recitation
+														🎧 {language === 'bn' ? 'অডিও তেলাওয়াত' : 'Audio Recitation'}
 													</span>
 												</div>
 												<div className="flex items-center gap-3">
@@ -389,12 +640,13 @@ const Index = () => {
 													<div className="flex-1 h-2 rounded-full bg-border">
 														<div className="h-2 w-1/3 rounded-full bg-primary/50" />
 													</div>
-													<span className="text-xs text-muted-foreground">0:42</span>
+													<span className="text-xs text-muted-foreground">{t.audioTime}</span>
 												</div>
 											</div>
 
 											<p className="text-xs text-muted-foreground text-center pt-2">
-												— Sheikh Mishary Rashid Alafasy · Ayat al-Kursi
+												— {language === 'bn' ? 'শায়খ মিশারি রাশিদ আল-আফাসী' : 'Sheikh Mishary Rashid Alafasy'} ·{' '}
+												{t.surahName}
 											</p>
 										</div>
 									</div>
@@ -408,31 +660,10 @@ const Index = () => {
 			{/* What You'll Receive — feature cards with numbers */}
 			<section className="py-16 md:py-24">
 				<div className="container">
-					<h2 className="mb-2 text-center font-display text-3xl font-bold text-foreground">What You'll Receive</h2>
-					<p className="mb-12 text-center text-muted-foreground max-w-xl mx-auto">
-						A structured journey through the entire Quran — one morning at a time.
-					</p>
+					<h2 className="mb-2 text-center font-display text-3xl font-bold text-foreground">{t.featuresTitle}</h2>
+					<p className="mb-12 text-center text-muted-foreground max-w-xl mx-auto">{t.featuresDesc}</p>
 					<div className="grid gap-6 md:grid-cols-3 max-w-4xl mx-auto">
-						{[
-							{
-								num: '01',
-								icon: Mail,
-								title: 'One Ayah, Every Morning',
-								desc: 'A carefully curated Ayah delivered to your inbox at 6 AM — complete with Arabic text, translations, and audio.',
-							},
-							{
-								num: '02',
-								icon: BookOpen,
-								title: 'Surah by Surah, In Order',
-								desc: 'We move through each Surah sequentially so every verse gets its moment. A structured path through the entire Quran.',
-							},
-							{
-								num: '03',
-								icon: Headphones,
-								title: 'Arabic, Translations & Audio',
-								desc: 'Arabic text, English & Bangla translations, and audio by Sheikh Mishary Alafasy — all in one beautiful email.',
-							},
-						].map((f) => (
+						{t.features.map((f) => (
 							<Card key={f.title} className="group hover:shadow-lg transition-shadow border-border">
 								<CardContent className="p-6">
 									<div className="flex items-center gap-3 mb-4">
@@ -459,18 +690,9 @@ const Index = () => {
 
 						<div className="relative flex flex-col gap-10 md:flex-row md:items-center md:justify-between">
 							<div className="max-w-lg">
-								<p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-secondary">
-									Start Today — 7 Days Free Trial
-								</p>
-								<h2 className="font-display text-3xl md:text-4xl font-bold text-white leading-tight">
-									Begin Your Journey
-									<br />
-									<span className="italic text-secondary">One Verse at a Time</span>
-								</h2>
-								<p className="mt-4 text-white/60 leading-relaxed">
-									One verse every morning. Surah by Surah. Arabic, English &amp; Bangla translations with audio
-									recitation. 7 days free trial.
-								</p>
+								<p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-secondary">{t.ctaBadge}</p>
+								<h2 className="font-display text-3xl md:text-4xl font-bold text-white leading-tight">{t.ctaTitle}</h2>
+								<p className="mt-4 text-white/60 leading-relaxed">{t.ctaDesc}</p>
 							</div>
 
 							<div className="w-full md:w-auto">
@@ -480,7 +702,7 @@ const Index = () => {
 											<Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40" />
 											<Input
 												type="email"
-												placeholder="Enter your email address"
+												placeholder={t.placeholder}
 												value={email}
 												onChange={(e) => setEmail(e.target.value)}
 												required
@@ -493,20 +715,17 @@ const Index = () => {
 											disabled={isSubscribing}
 											className="w-full gap-2 bg-secondary hover:bg-secondary/90 text-secondary-foreground h-12 font-semibold"
 										>
-											{isSubscribing ? 'Subscribing...' : '✦ Start 7 Days Free Trial'}{' '}
-											<ArrowRight className="h-4 w-4" />
+											{isSubscribing ? t.btnSubscribing : t.btnSubscribe} <ArrowRight className="h-4 w-4" />
 										</Button>
 									</form>
 									{subscribeMessage && (
 										<p
-											className={`text-sm text-center ${subscribeMessage.includes('Successfully') ? 'text-green-400' : 'text-red-400'}`}
+											className={`text-sm text-center ${subscribeMessage.includes('Successfully') || subscribeMessage.includes('সফলভাবে') ? 'text-green-400' : 'text-red-400'}`}
 										>
 											{subscribeMessage}
 										</p>
 									)}
-									<p className="text-[11px] text-white/40 leading-relaxed">
-										🔒 No spam. Unsubscribe anytime. First email tomorrow at 6 AM.
-									</p>
+									<p className="text-[11px] text-white/40 leading-relaxed text-center">{t.spam}</p>
 								</div>
 							</div>
 						</div>
@@ -517,28 +736,10 @@ const Index = () => {
 			{/* Testimonials */}
 			<section className="py-16 md:py-24">
 				<div className="container">
-					<h2 className="mb-2 text-center font-display text-3xl font-bold text-foreground">
-						Loved by Muslims <span className="italic text-secondary">Worldwide</span>
-					</h2>
-					<p className="mb-12 text-center text-muted-foreground">Here's what our subscribers have to say.</p>
+					<h2 className="mb-2 text-center font-display text-3xl font-bold text-foreground">{t.testimonialsTitle}</h2>
+					<p className="mb-12 text-center text-muted-foreground">{t.testimonialsDesc}</p>
 					<div className="grid gap-6 md:grid-cols-3 max-w-4xl mx-auto">
-						{[
-							{
-								name: 'Aisha R.',
-								text: 'Starting my day with an Ayah has brought so much peace to my mornings. The Bangla translation is a blessing!',
-								loc: 'Dhaka, Bangladesh',
-							},
-							{
-								name: 'Omar K.',
-								text: "I've tried many Quran apps but this email format is the simplest and most consistent way to stay connected.",
-								loc: 'London, UK',
-							},
-							{
-								name: 'Fatima H.',
-								text: 'The audio recitation by Mishary Alafasy is beautiful. I look forward to every morning email.',
-								loc: 'Toronto, Canada',
-							},
-						].map((t) => (
+						{t.testimonials.map((t) => (
 							<Card key={t.name} className="border-border">
 								<CardContent className="p-6">
 									<div className="mb-3 flex gap-1">
@@ -556,40 +757,17 @@ const Index = () => {
 				</div>
 			</section>
 
-			{/* Pricing */}
+			{/* Support Section */}
 			<PricingSection />
 
 			{/* FAQ */}
 			<section className="py-16 md:py-24">
 				<div className="container">
 					<div className="mx-auto max-w-2xl">
-						<h2 className="mb-2 text-center font-display text-3xl font-bold text-foreground">
-							Frequently Asked <span className="italic text-secondary">Questions</span>
-						</h2>
-						<p className="mb-8 text-center text-muted-foreground">Everything you need to know about Daily Quran.</p>
+						<h2 className="mb-2 text-center font-display text-3xl font-bold text-foreground">{t.faqTitle}</h2>
+						<p className="mb-8 text-center text-muted-foreground">{t.faqDesc}</p>
 						<Accordion type="single" collapsible className="w-full">
-							{[
-								{
-									q: 'Is Daily Quran free?',
-									a: 'We offer a 7-day free trial so you can experience the service. After that, a small subscription keeps your daily Ayahs coming.',
-								},
-								{
-									q: 'Which translation do you use?',
-									a: 'We use Sahih International for English and Dr. Abu Bakr Muhammad Zakaria for Bangla translation.',
-								},
-								{
-									q: 'Who is the reciter?',
-									a: 'All audio recitations are by Sheikh Mishary Rashid Alafasy, one of the most beloved reciters worldwide.',
-								},
-								{
-									q: 'What time will I receive the email?',
-									a: 'Emails are sent at 6:00 AM UTC every morning. Local timezone support is coming soon!',
-								},
-								{
-									q: 'Can I browse the Quran without subscribing?',
-									a: 'Absolutely! Our verse browser is open to everyone. Visit the Browse Quran page to explore all 114 Surahs.',
-								},
-							].map((faq, i) => (
+							{t.faqs.map((faq, i) => (
 								<AccordionItem key={i} value={`faq-${i}`}>
 									<AccordionTrigger className="text-left">{faq.q}</AccordionTrigger>
 									<AccordionContent>{faq.a}</AccordionContent>

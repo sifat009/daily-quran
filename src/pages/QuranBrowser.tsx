@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Play, Pause, ChevronRight, Volume2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { surahs, type Surah } from '../../api/_data/surahs';
+import { useLanguage } from '@/hooks/useLanguage';
 
 interface Ayah {
 	number: number;
@@ -17,6 +18,7 @@ interface Ayah {
 }
 
 const QuranBrowser = () => {
+	const { language } = useLanguage();
 	const [selectedSurah, setSelectedSurah] = useState<Surah>(surahs[0]);
 	const [ayahs, setAyahs] = useState<Ayah[]>([]);
 	const [loading, setLoading] = useState(false);
@@ -104,10 +106,9 @@ const QuranBrowser = () => {
 		}
 	};
 
-	// Load first surah on mount
-	useState(() => {
+	useEffect(() => {
 		fetchAyahs(surahs[0]);
-	});
+	}, []);
 
 	return (
 		<div className="min-h-screen flex flex-col">
@@ -128,8 +129,12 @@ const QuranBrowser = () => {
 					}`}
 				>
 					<div className="p-4 border-b">
-						<h2 className="font-display text-lg font-bold text-foreground">114 Surahs</h2>
-						<p className="text-xs text-muted-foreground">Select a Surah to read</p>
+						<h2 className="font-display text-lg font-bold text-foreground">
+							{language === 'bn' ? '১১৪টি সূরা' : '114 Surahs'}
+						</h2>
+						<p className="text-xs text-muted-foreground">
+							{language === 'bn' ? 'পড়ার জন্য একটি সূরা নির্বাচন করুন' : 'Select a Surah to read'}
+						</p>
 					</div>
 					<ScrollArea className="h-[calc(100vh-8rem)]">
 						<div className="p-2">
@@ -147,7 +152,7 @@ const QuranBrowser = () => {
 									<div className="min-w-0 flex-1">
 										<p className="font-medium truncate">{s.name}</p>
 										<p className="text-xs text-muted-foreground truncate">
-											{s.englishName} · {s.ayahCount} ayahs
+											{s.englishName} · {s.ayahCount} {language === 'bn' ? 'টি আয়াত' : 'Ayahs'}
 										</p>
 									</div>
 									<span className="font-arabic text-base text-muted-foreground">{s.nameArabic}</span>
@@ -162,12 +167,14 @@ const QuranBrowser = () => {
 					<div className="container py-8 max-w-3xl">
 						<div className="mb-8 text-center">
 							<Badge variant="secondary" className="mb-2">
-								{selectedSurah.revelationType}
+								{selectedSurah.revelationType === 'Meccan' 
+									? (language === 'bn' ? 'মাক্কী' : 'Meccan') 
+									: (language === 'bn' ? 'মাদানী' : 'Medinan')}
 							</Badge>
 							<h1 className="font-display text-3xl font-bold text-foreground">{selectedSurah.name}</h1>
 							<p className="font-arabic text-2xl text-muted-foreground mt-1">{selectedSurah.nameArabic}</p>
 							<p className="text-sm text-muted-foreground mt-1">
-								{selectedSurah.englishName} · {selectedSurah.ayahCount} Ayahs
+								{selectedSurah.englishName} · {selectedSurah.ayahCount} {language === 'bn' ? 'টি আয়াত' : 'Ayahs'}
 							</p>
 							{!loading && ayahs.length > 0 && (
 								<Button
@@ -178,11 +185,11 @@ const QuranBrowser = () => {
 								>
 									{playingFullSurah ? (
 										<>
-											<Pause className="h-4 w-4" /> Stop Full Surah
+											<Pause className="h-4 w-4" /> {language === 'bn' ? 'সম্পূর্ণ সূরা বন্ধ করুন' : 'Stop Full Surah'}
 										</>
 									) : (
 										<>
-											<Volume2 className="h-4 w-4" /> Play Full Surah
+											<Volume2 className="h-4 w-4" /> {language === 'bn' ? 'সম্পূর্ণ সূরা শুনুন' : 'Listen Full Surah'}
 										</>
 									)}
 								</Button>
@@ -212,11 +219,11 @@ const QuranBrowser = () => {
 												>
 													{playingAyah === ayah.number ? (
 														<>
-															<Pause className="h-3.5 w-3.5" /> Pause
+															<Pause className="h-3.5 w-3.5" /> {language === 'bn' ? 'থামুন' : 'Pause'}
 														</>
 													) : (
 														<>
-															<Play className="h-3.5 w-3.5" /> Listen
+															<Play className="h-3.5 w-3.5" /> {language === 'bn' ? 'শুনুন' : 'Listen'}
 														</>
 													)}
 												</Button>
@@ -228,11 +235,11 @@ const QuranBrowser = () => {
 
 											<div className="space-y-3 border-t pt-4">
 												<div>
-													<span className="text-xs font-semibold uppercase tracking-wider text-secondary">English</span>
+													<span className="text-xs font-semibold uppercase tracking-wider text-secondary">English Translation</span>
 													<p className="text-sm text-muted-foreground mt-1">{ayah.english}</p>
 												</div>
 												<div>
-													<span className="text-xs font-semibold uppercase tracking-wider text-secondary">বাংলা</span>
+													<span className="text-xs font-semibold uppercase tracking-wider text-secondary">বাংলা অনুবাদ</span>
 													<p className="text-sm text-muted-foreground mt-1">{ayah.bangla}</p>
 												</div>
 											</div>

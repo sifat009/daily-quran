@@ -1,159 +1,144 @@
-import { Check, ArrowRight, Sparkles, BookOpen, Crown, Zap } from 'lucide-react';
+import { Heart, Copy, CheckCircle2, Wallet, MessageCircle, Coffee } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-
-const plans = [
-	{
-		name: 'Seeker',
-		price: 'Free',
-		period: '',
-		description: 'Daily Ayahs delivered to your inbox',
-		features: [
-			'1 Ayah delivered daily',
-			'Arabic text + English translation',
-			'Bangla translation',
-			'Audio recitation',
-			'Full Quran browser access',
-		],
-		cta: 'Subscribe Now',
-		highlighted: false,
-		icon: Zap,
-	},
-	{
-		name: 'Complete Quran',
-		price: '$3',
-		period: '/month',
-		description: 'All 6,236 Ayahs. Chapter by chapter. The complete plan.',
-		features: [
-			'Everything in Seeker',
-			'Chapters 1–114, delivered in order',
-			'Support the mission',
-		],
-		cta: 'Support the Project',
-		highlighted: true,
-		badge: 'Most Popular',
-		icon: BookOpen,
-	},
-	{
-		name: 'Premium',
-		price: '$24',
-		period: '/year',
-		description: 'Best value for your daily Quran journey. Save 33%.',
-		features: [
-			'Everything in Complete Quran',
-			'Save $12 per year',
-			'Early access to new features',
-			'Support the mission',
-		],
-		cta: 'Go Premium',
-		highlighted: false,
-		badge: 'Best Value',
-		icon: Crown,
-	},
-];
+import { toast } from 'sonner';
+import { useLanguage } from '@/hooks/useLanguage';
 
 const PricingSection = () => {
+	const { language } = useLanguage();
+
+	const copyToClipboard = (text: string, label: string) => {
+		navigator.clipboard.writeText(text);
+		const successMsg = language === 'bn' 
+			? `${label} নাম্বারটি কপি করা হয়েছে!` 
+			: `${label} number copied!`;
+		toast.success(successMsg);
+	};
+
+	const openWhatsApp = () => {
+		const message = language === 'bn'
+			? 'আসসালামু আলাইকুম, আমি ডেইলি কুরআন প্রজেক্টে ডোনেট করতে আগ্রহী।'
+			: 'Assalamu Alaikum, I am interested in supporting the Daily Quran project.';
+		window.open(`https://wa.me/8801932391487?text=${encodeURIComponent(message)}`, '_blank');
+	};
+
 	return (
-		<section className="py-16 md:py-24 bg-muted/30" id="pricing">
+		<section className="py-16 md:py-24 bg-muted/30" id="support">
 			<div className="container">
-				<div className="text-center mb-4">
-					<div className="inline-flex items-center gap-2 rounded-full bg-secondary/15 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-secondary mb-4">
-						<Sparkles className="h-3.5 w-3.5" /> Choose Your Path
+				<div className="mx-auto max-w-3xl text-center">
+					<div className="inline-flex items-center gap-2 rounded-full bg-secondary/15 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-secondary mb-6">
+						<Heart className="h-3.5 w-3.5 fill-secondary" /> 
+						{language === 'bn' ? 'সাদাকা জারিয়া' : 'Sadaqah Jariyah'}
 					</div>
+					<h2 className="mb-4 font-display text-3xl md:text-4xl font-bold text-foreground">
+						{language === 'bn' ? (
+							<>সবার জন্য ফ্রী, <span className="italic text-secondary">সবার সহযোগিতায়</span></>
+						) : (
+							<>Free for all, <span className="italic text-secondary">supported by you</span></>
+						)}
+					</h2>
+					<p className="mb-12 text-muted-foreground leading-relaxed">
+						{language === 'bn' 
+							? 'ডেইলি কুরআন সবার জন্য উন্মুক্ত একটি প্রজেক্ট। এই প্রজেক্টের হোস্টিং, ইমেইল এবং মেইনটেন্যান্স খরচ সচল রাখতে আপনার সামর্থ্য অনুযায়ী কন্ট্রিবিউট করতে পারেন।'
+							: 'Daily Quran is a labor of love, free for everyone. Your generous support helps us cover the costs of hosting, premium email delivery, and ongoing maintenance.'}
+					</p>
 				</div>
-				<h2 className="mb-2 text-center font-display text-3xl font-bold text-foreground">
-					Choose your <span className="italic text-secondary">path</span>
-				</h2>
-				<p className="mb-12 text-center text-muted-foreground max-w-md mx-auto">
-					Start free. Upgrade anytime. Walk across months of learning — grab yours now.
-				</p>
 
-				<div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-3 items-start">
-					{plans.map((plan) => (
-						<Card
-							key={plan.name}
-							className={`relative flex flex-col transition-all ${
-								plan.highlighted
-									? 'border-2 border-secondary shadow-xl md:scale-[1.05] bg-[hsl(220,25%,14%)] text-white'
-									: 'border-border hover:shadow-lg'
-							}`}
-						>
-							{plan.badge && (
-								<div className="absolute -top-3 left-1/2 -translate-x-1/2">
-									<Badge
-										className={`border-0 px-3 py-1 text-xs font-semibold ${
-											plan.highlighted ? 'bg-secondary text-secondary-foreground' : 'bg-primary text-primary-foreground'
-										}`}
-									>
-										{plan.badge}
-									</Badge>
-								</div>
-							)}
-							<CardContent className="flex flex-1 flex-col p-6 pt-8">
-								<div className="flex items-center gap-2 mb-1">
-									<div
-										className={`h-8 w-8 rounded-lg flex items-center justify-center ${
-											plan.highlighted ? 'bg-secondary/20' : 'bg-primary/10'
-										}`}
-									>
-										<plan.icon className={`h-4 w-4 ${plan.highlighted ? 'text-secondary' : 'text-primary'}`} />
-									</div>
-									<h3
-										className={`font-display text-lg font-semibold ${
-											plan.highlighted ? 'text-white' : 'text-foreground'
-										}`}
-									>
-										{plan.name}
-									</h3>
-								</div>
-								<div className="mt-3 flex items-baseline gap-1">
-									<span
-										className={`font-display text-4xl font-bold ${plan.highlighted ? 'text-white' : 'text-foreground'}`}
-									>
-										{plan.price}
-									</span>
-									<span className={`text-sm ${plan.highlighted ? 'text-white/60' : 'text-muted-foreground'}`}>
-										{plan.period}
-									</span>
-								</div>
-								<p className={`mt-2 text-sm ${plan.highlighted ? 'text-white/70' : 'text-muted-foreground'}`}>
-									{plan.description}
+				<div className="mx-auto max-w-4xl grid gap-8 md:grid-cols-2 items-stretch">
+					{/* Left Side: Why Support? */}
+					<Card className="border-border bg-background/50 backdrop-blur-sm">
+						<CardContent className="p-8">
+							<h3 className="text-xl font-bold mb-6 flex items-center gap-2">
+								<Heart className="h-5 w-5 text-secondary" />
+								{language === 'bn' ? 'আপনার সাপোর্ট কেন প্রয়োজন?' : 'Why your support matters?'}
+							</h3>
+							<ul className="space-y-4">
+								{[
+									language === 'bn' ? 'প্রিমিয়াম ইমেইল ডেলিভারি সার্ভিস' : 'Premium Email Delivery Service',
+									language === 'bn' ? 'হাই-পারফরম্যান্স সার্ভার হোস্টিং খরচ' : 'High-Performance Server Hosting',
+									language === 'bn' ? 'নতুন ফিচার ডেভেলপমেন্ট' : 'New Feature Development',
+									language === 'bn' ? 'সম্পূর্ণ বিজ্ঞাপন মুক্ত অভিজ্ঞতা' : 'Keeping the platform 100% Ad-Free',
+								].map((item, i) => (
+									<li key={i} className="flex items-start gap-3 text-sm text-muted-foreground">
+										<CheckCircle2 className="h-4 w-4 text-secondary mt-0.5 shrink-0" />
+										{item}
+									</li>
+								))}
+							</ul>
+						</CardContent>
+					</Card>
+
+					{/* Right Side: Donation Methods */}
+					<Card className="border-secondary/30 bg-[hsl(220,25%,14%)] text-white shadow-xl relative overflow-hidden">
+						<div className="absolute top-0 right-0 p-4 opacity-10">
+							<Wallet className="h-24 w-24" />
+						</div>
+						<CardContent className="p-8 relative z-10">
+							<h3 className="text-xl font-bold mb-6 flex items-center gap-2 text-white">
+								<Wallet className="h-5 w-5 text-secondary" />
+								{language === 'bn' ? 'ডোনেশন মেথড' : 'Support Methods'}
+							</h3>
+
+							<div className="space-y-4">
+								{language === 'bn' ? (
+									<>
+										<div className="group rounded-xl bg-white/5 border border-white/10 p-4 flex items-center justify-between transition-all hover:bg-white/10">
+											<div>
+												<p className="text-xs font-semibold text-white/50 uppercase tracking-wider mb-1">bKash (Personal)</p>
+												<p className="text-lg font-mono font-bold tracking-wider">01932391487</p>
+											</div>
+											<Button 
+												variant="ghost" 
+												size="icon" 
+												className="text-white/40 hover:text-secondary hover:bg-transparent"
+												onClick={() => copyToClipboard('01932391487', 'bKash')}
+											>
+												<Copy className="h-4 w-4" />
+											</Button>
+										</div>
+										<Button 
+											onClick={openWhatsApp}
+											className="w-full h-12 bg-[#25D366] hover:bg-[#25D366]/90 text-white font-bold gap-2"
+										>
+											<MessageCircle className="h-5 w-5" /> হোয়াটসঅ্যাপে যোগাযোগ করুন
+										</Button>
+									</>
+								) : (
+									<>
+										<div className="grid gap-3">
+											<Button 
+												className="w-full h-12 bg-[#FFDD00] hover:bg-[#FFDD00]/90 text-black font-bold gap-2"
+												onClick={() => window.open('https://buymeacoffee.com/yourprofile', '_blank')}
+											>
+												<Coffee className="h-4 w-4" /> Buy Me a Coffee
+											</Button>
+											<Button 
+												variant="outline" 
+												className="w-full h-12 border-white/20 bg-white/5 hover:bg-white/10 text-white font-bold gap-2"
+												onClick={openWhatsApp}
+											>
+												<MessageCircle className="h-4 w-4 text-[#25D366]" /> Contact via WhatsApp
+											</Button>
+										</div>
+									</>
+								)}
+								<p className="mt-3 text-[10px] text-white/40 text-center italic">
+									{language === 'bn' 
+										? '*সেন্ড মানি করার পর রেফারেন্সে ইমেইল দিতে পারেন।' 
+										: '*You can reference your email when supporting.'}
 								</p>
-
-								<ul className="mt-6 flex-1 space-y-3">
-									{plan.features.map((feature) => (
-										<li key={feature} className="flex items-start gap-2 text-sm">
-											<Check
-												className={`mt-0.5 h-4 w-4 shrink-0 ${plan.highlighted ? 'text-secondary' : 'text-primary'}`}
-											/>
-											<span className={plan.highlighted ? 'text-white/80' : 'text-foreground/80'}>{feature}</span>
-										</li>
-									))}
-								</ul>
-
-								<button
-									onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-									className="mt-8 block w-full"
-								>
-									<Button
-										className={`w-full gap-2 ${
-											plan.highlighted ? 'bg-secondary hover:bg-secondary/90 text-secondary-foreground' : ''
-										}`}
-										variant={plan.highlighted ? 'default' : 'outline'}
-										size="lg"
-									>
-										{plan.cta} <ArrowRight className="h-4 w-4" />
-									</Button>
-								</button>
-							</CardContent>
-						</Card>
-					))}
+							</div>
+						</CardContent>
+					</Card>
 				</div>
 
-				<p className="mt-8 text-center text-xs text-muted-foreground">
-					All plans include a 7-day free trial. Cancel anytime. No questions asked.
-				</p>
+				<div className="mt-16 text-center">
+					<p className="text-sm text-muted-foreground italic">
+						{language === 'bn'
+							? '"যে ব্যক্তি মানুষকে হেদায়াতের দিকে আহ্বান করবে, তার জন্য ওই পরিমাণ সওয়াব রয়েছে যা পালনকারীর জন্য রয়েছে।" — (সহীহ মুসলিম)'
+							: '"Whoever guides someone to goodness will have a reward like one who did it." — (Sahih Muslim)'}
+					</p>
+				</div>
 			</div>
 		</section>
 	);

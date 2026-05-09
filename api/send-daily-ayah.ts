@@ -175,23 +175,23 @@ async function fetchAyahData(surah: number, ayah: number): Promise<QuranVerse> {
 }
 async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse) {
 	const unsubscribeUrl = `${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'}/api/unsubscribe?token=${subscriber.unsubscribe_token}`;
-	const surahData = surahs.find((s) => s.number === subscriber.current_surah_number);
-	const surahNameBn = surahData?.name || 'সূরা';
-	const surahNameEn = surahData?.englishName || 'Surah';
+	const surahName = surahs.find((s) => s.number === subscriber.current_surah_number)?.englishName || 'Surah';
 
 	const emailHtml = `
 <!DOCTYPE html>
-<html lang="bn" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<html lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daily Quran Ayah</title>
+  <title>Your Daily Ayah</title>
   <!--[if mso]>
-  <xml>
-    <o:OfficeDocumentSettings>
-      <o:PixelsPerInch>96</o:PixelsPerInch>
-    </o:OfficeDocumentSettings>
-  </xml>
+  <noscript>
+    <xml>
+      <o:OfficeDocumentSettings>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+    </xml>
+  </noscript>
   <![endif]-->
   <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
@@ -213,14 +213,13 @@ async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse) {
       padding: 24px 0;
     }
     .greeting {
-      font-size: 14px;
-      color: #4b5563;
+      font-size: 15px;
+      color: #333333;
       margin-bottom: 20px;
       padding: 0 10px;
-      text-align: center;
     }
     .ayah-card {
-      background-color: #fdfaf2;
+      background-color: #fdfaf2; /* Light cream/yellowish */
       border-radius: 16px;
       padding: 40px 24px;
       text-align: center;
@@ -231,13 +230,13 @@ async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse) {
     .badge-secondary {
       display: inline-block;
       padding: 4px 16px;
-      border: 1px solid #f59e0b;
+      border: 1px solid #f59e0b; /* Gold border */
       border-radius: 100px;
       font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      color: #d97706;
+      color: #d97706; /* Darker gold */
       margin-bottom: 24px;
       background-color: #ffffff;
     }
@@ -274,18 +273,18 @@ async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse) {
       margin-bottom: 24px;
     }
     .translation-box {
-      background-color: #f2f7f4;
-      border: 1px solid #d1e3d6;
+      background-color: #f2f7f4; /* Very light green */
+      border: 1px solid #d1e3d6; /* Light green border */
       border-radius: 12px;
       padding: 20px;
       text-align: left;
     }
     .translation-label {
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      color: #1b5e20;
+      color: #1b5e20; /* Dark green */
       margin-bottom: 12px;
     }
     .translation-dot {
@@ -320,7 +319,7 @@ async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse) {
       display: block;
     }
     .audio-label {
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -371,14 +370,15 @@ async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse) {
       border-radius: 3px;
     }
     .time-cell {
+      width: 30px;
       vertical-align: middle;
-      font-size: 11px;
+      font-size: 12px;
       color: #6b7280;
       text-align: right;
     }
     .footer-author {
       text-align: center;
-      font-size: 12px;
+      font-size: 13px;
       color: #6b7280;
       margin-bottom: 40px;
     }
@@ -387,13 +387,13 @@ async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse) {
       font-size: 11px;
       color: #9ca3af;
       margin-top: 40px;
-      line-height: 1.8;
     }
     .unsub-text a {
       color: #6b7280;
       text-decoration: underline;
     }
 
+    /* Responsive grid classes */
     .col-half {
       width: 48%;
       display: inline-block;
@@ -412,23 +412,23 @@ async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse) {
       .col-spacer {
         display: none !important;
       }
+      .ayah-card {
+        padding: 30px 16px;
+      }
+      .arabic {
+        font-size: 26px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <div class="greeting">
-        Assalamu Alaikum 🤲 আসসালামু আলাইকুম<br>
-        Here is your daily Ayah for today. আপনার আজকের আয়াতটি নিচে দেওয়া হলো।
-      </div>
+      <div class="greeting">Assalamu Alaikum 🤲 Here is your Ayah for today</div>
 
       <!-- Ayah Card -->
       <div class="ayah-card">
-        <div class="badge-secondary">
-          ${surahNameEn} · Verse ${subscriber.current_ayah_number}<br>
-          ${surahNameBn} · আয়াত ${subscriber.current_ayah_number}
-        </div>
+        <div class="badge-secondary">SURAH ${subscriber.current_surah_number} · VERSE ${subscriber.current_ayah_number}</div>
         <p class="arabic" dir="rtl">${ayahData.text}</p>
         <div class="divider">
           <span class="divider-line"></span>
@@ -448,9 +448,9 @@ async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse) {
         <div class="col-half">
           <div class="translation-box">
             <div class="translation-label">
-              <span class="translation-dot"></span>BENGALI TRANSLATION · বাংলা অনুবাদ
+              <span class="translation-dot"></span>ENGLISH TRANSLATION
             </div>
-            <p class="translation-text-bn">${ayahData.translation.bn.text}</p>
+            <p class="translation-text-en">"${ayahData.translation.en.text}"</p>
           </div>
         </div>
         
@@ -464,9 +464,9 @@ async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse) {
         <div class="col-half">
           <div class="translation-box">
             <div class="translation-label">
-              <span class="translation-dot"></span>ENGLISH TRANSLATION · ইংরেজি অনুবাদ
+              <span class="translation-dot"></span>বাংলা অনুবাদ
             </div>
-            <p class="translation-text-en">"${ayahData.translation.en.text}"</p>
+            <p class="translation-text-bn">${ayahData.translation.bn.text}</p>
           </div>
         </div>
         
@@ -480,7 +480,7 @@ async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse) {
       <!-- Audio Player -->
       <a href="${ayahData.audio}" class="audio-box">
         <div class="audio-label">
-          <span class="audio-dot"></span> 🎧 AUDIO RECITATION · অডিও তেলাওয়াত
+          <span class="audio-dot"></span> 🎧 AUDIO RECITATION
         </div>
         <table class="player-row" cellpadding="0" cellspacing="0" border="0">
           <tr>
@@ -494,20 +494,19 @@ async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse) {
                 <div class="progress-fill"></div>
               </div>
             </td>
-            <td class="time-cell">Listen শুনুন</td>
+            <td class="time-cell">0:42</td>
           </tr>
         </table>
       </a>
 
       <!-- Footer Info -->
       <div class="footer-author">
-        — Sheikh Mishary Rashid Alafasy · ${surahNameEn} (${subscriber.current_surah_number}:${subscriber.current_ayah_number})
+        — Sheikh Mishary Rashid Alafasy · ${surahName}
       </div>
 
       <div class="unsub-text">
-        This email was sent to ${subscriber.email}<br>
-        এই ইমেইলটি ${subscriber.email} এ পাঠানো হয়েছে।<br>
-        <a href="${unsubscribeUrl}">Unsubscribe আনসাবস্ক্রাইব করুন</a>
+        This daily Ayah was sent to ${subscriber.email}.<br>
+        <a href="${unsubscribeUrl}">Unsubscribe</a>
       </div>
     </div>
   </div>
@@ -519,10 +518,9 @@ async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse) {
 		await transporter.sendMail({
 			from: process.env.EMAIL_FROM || `"Daily Quran" <${process.env.SMTP_USER}>`,
 			to: subscriber.email,
-			subject: `Today's Ayah - ${surahNameEn} (${subscriber.current_surah_number}:${subscriber.current_ayah_number})`,
+			subject: `Your Daily Ayah - ${surahName} ${subscriber.current_surah_number}:${subscriber.current_ayah_number}`,
 			html: emailHtml,
 		});
-
 	} catch (error: any) {
 		throw new Error(`SMTP error: ${error.message}`);
 	}

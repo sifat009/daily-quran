@@ -23,25 +23,22 @@ export default async function handler(req: Request) {
       });
     }
 
+    const normalizedEmail = email.toLowerCase().trim();
     const unsubscribeToken = crypto.randomUUID();
 
+    // Try to insert or update (upsert)
     const { data, error } = await supabase
       .from('subscribers')
-      .insert([{ email, unsubscribe_token: unsubscribeToken }])
+      .upsert(
+        { email: normalizedEmail, is_active: true, unsubscribe_token: unsubscribeToken },
+        { onConflict: 'email' }
+      )
       .select();
 
-    if (error) {
-      if (error.code === '23505') {
-        return new Response(JSON.stringify({ error: 'Email already subscribed' }), {
-          status: 409,
-          headers: { 'Content-Type': 'application/json' },
-        });
-      }
-      throw error;
-    }
+    if (error) throw error;
 
     return new Response(JSON.stringify({
-      message: 'Successfully subscribed! Check your email tomorrow.',
+      message: 'Successfully subscribed! You will receive your daily Ayah starting tomorrow.',
       subscriber: data?.[0],
     }), {
       status: 200,

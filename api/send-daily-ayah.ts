@@ -79,7 +79,7 @@ export default async function handler(req: Request) {
 
 				const ayahData = await fetchAyahData(nextSurah, nextAyah);
 
-				await sendAyahEmail(subscriber, ayahData);
+				await sendAyahEmail(subscriber, ayahData, nextSurah, nextAyah);
 
 				// Update progress
 				await supabase
@@ -173,9 +173,9 @@ async function fetchAyahData(surah: number, ayah: number): Promise<QuranVerse> {
 		},
 	};
 }
-async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse) {
+async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse, surahNumber: number, ayahNumber: number) {
 	const unsubscribeUrl = `${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'}/api/unsubscribe?token=${subscriber.unsubscribe_token}`;
-	const surahName = surahs.find((s) => s.number === subscriber.current_surah_number)?.englishName || 'Surah';
+	const surahName = surahs.find((s) => s.number === surahNumber)?.englishName || 'Surah';
 
 	const emailHtml = `
 <!DOCTYPE html>
@@ -428,7 +428,7 @@ async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse) {
 
       <!-- Ayah Card -->
       <div class="ayah-card">
-        <div class="badge-secondary">SURAH ${subscriber.current_surah_number} · VERSE ${subscriber.current_ayah_number}</div>
+        <div class="badge-secondary">SURAH ${surahNumber} · VERSE ${ayahNumber}</div>
         <p class="arabic" dir="rtl">${ayahData.text}</p>
         <div class="divider">
           <span class="divider-line"></span>
@@ -501,7 +501,7 @@ async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse) {
 
       <!-- Footer Info -->
       <div class="footer-author">
-        — Sheikh Mishary Rashid Alafasy · ${surahName}
+        — Sheikh Mishary Rashid Alafasy · ${surahName} (${surahNumber}:${ayahNumber})
       </div>
 
       <div class="unsub-text">
@@ -518,7 +518,7 @@ async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse) {
 		await transporter.sendMail({
 			from: process.env.EMAIL_FROM || `"Daily Quran" <${process.env.SMTP_USER}>`,
 			to: subscriber.email,
-			subject: `Your Daily Ayah - ${surahName} ${subscriber.current_surah_number}:${subscriber.current_ayah_number}`,
+			subject: `Your Daily Ayah - ${surahName} ${surahNumber}:${ayahNumber}`,
 			html: emailHtml,
 		});
 	} catch (error: any) {

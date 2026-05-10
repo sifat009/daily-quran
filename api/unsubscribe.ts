@@ -24,20 +24,28 @@ export default async function handler(req: Request) {
       });
     }
 
-    const { data, error } = await supabase
+    // 1. Find the subscriber with this token to get their email
+    const { data: subData, error: findError } = await supabase
       .from('subscribers')
-      .update({ is_active: false })
+      .select('email')
       .eq('unsubscribe_token', token)
-      .select();
+      .single();
 
-    if (error) throw error;
-
-    if (!data || data.length === 0) {
-      return new Response(JSON.stringify({ error: 'Invalid token' }), {
+    if (findError || !subData) {
+      return new Response(JSON.stringify({ error: 'Invalid or expired token' }), {
         status: 404,
         headers: { 'Content-Type': 'application/json' },
       });
     }
+
+    // 2. Unsubscribe all active records with this email (handles duplicates)
+    const { data, error } = await supabase
+      .from('subscribers')
+      .update({ is_active: false })
+      .eq('email', subData.email)
+      .select();
+
+    if (error) throw error;
 
     return new Response(
       `

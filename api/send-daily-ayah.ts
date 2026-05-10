@@ -176,6 +176,7 @@ async function fetchAyahData(surah: number, ayah: number): Promise<QuranVerse> {
 async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse, surahNumber: number, ayahNumber: number) {
 	const unsubscribeUrl = `${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'}/api/unsubscribe?token=${subscriber.unsubscribe_token}`;
 	const surahName = surahs.find((s) => s.number === surahNumber)?.englishName || 'Surah';
+	const supportUrl = `${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'}/#support`;
 
 	const emailHtml = `
 <!DOCTYPE html>
@@ -498,6 +499,24 @@ async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse, surah
           </tr>
         </table>
       </a>
+
+      <!-- Support Section -->
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 32px;">
+        <tr>
+          <td style="background-color: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 12px; padding: 24px; text-align: center;">
+            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #64748b; margin-bottom: 12px;">
+              Sadaqah Jariyah · সাদাকা জারিয়া
+            </div>
+            <p style="font-size: 14px; color: #475569; margin: 0 0 20px 0; line-height: 1.5;">
+              Help us keep this service free and ad-free for everyone.<br>
+              এই সার্ভিসটি সবার জন্য ফ্রী এবং বিজ্ঞাপন মুক্ত রাখতে আমাদের সহযোগিতা করুন।
+            </p>
+            <a href="${supportUrl}" style="display: inline-block; background-color: #1b5e20; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600;">
+              Support our Mission · সাপোর্ট করুন
+            </a>
+          </td>
+        </tr>
+      </table>
 
       <!-- Footer Info -->
       <div class="footer-author">

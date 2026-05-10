@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Mail, BookOpen, Star, Headphones, ArrowRight, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,6 +16,16 @@ const Index = () => {
 	const [isSubscribing, setIsSubscribing] = useState(false);
 	const [subscribeMessage, setSubscribeMessage] = useState('');
 	const { language } = useLanguage();
+	const { hash } = useLocation();
+
+	useEffect(() => {
+		if (hash) {
+			const element = document.getElementById(hash.replace('#', ''));
+			if (element) {
+				element.scrollIntoView({ behavior: 'smooth' });
+			}
+		}
+	}, [hash]);
 
 	const content = {
 		bn: {
@@ -761,7 +772,7 @@ const Index = () => {
 			<PricingSection />
 
 			{/* FAQ */}
-			<section className="py-16 md:py-24">
+			<section className="py-16 md:py-24" id="faq">
 				<div className="container">
 					<div className="mx-auto max-w-2xl">
 						<h2 className="mb-2 text-center font-display text-3xl font-bold text-foreground">{t.faqTitle}</h2>

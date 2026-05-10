@@ -1,4 +1,4 @@
-import { Heart, Copy, CheckCircle2, Wallet, MessageCircle, Coffee } from 'lucide-react';
+import { Heart, Copy, CheckCircle2, Wallet, MessageCircle } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
@@ -79,55 +79,38 @@ const PricingSection = () => {
 								{language === 'bn' ? 'ডোনেশন মেথড' : 'Support Methods'}
 							</h3>
 
-							<div className="space-y-4">
-								{language === 'bn' ? (
-									<>
-										<div className="group rounded-xl bg-white/5 border border-white/10 p-4 flex items-center justify-between transition-all hover:bg-white/10">
-											<div>
-												<p className="text-xs font-semibold text-white/50 uppercase tracking-wider mb-1">bKash (Personal)</p>
-												<p className="text-lg font-mono font-bold tracking-wider">01932391487</p>
-											</div>
-											<Button 
-												variant="ghost" 
-												size="icon" 
-												className="text-white/40 hover:text-secondary hover:bg-transparent"
-												onClick={() => copyToClipboard('01932391487', 'bKash')}
-											>
-												<Copy className="h-4 w-4" />
-											</Button>
+								<div className="space-y-4">
+									<div className="group rounded-xl bg-white/5 border border-white/10 p-4 flex items-center justify-between transition-all hover:bg-white/10">
+										<div>
+											<p className="text-xs font-semibold text-white/50 uppercase tracking-wider mb-1">
+												{language === 'bn' ? 'বিকাশ (পার্সোনাল)' : 'bKash (Personal)'}
+											</p>
+											<p className="text-lg font-mono font-bold tracking-wider">01932391487</p>
 										</div>
 										<Button 
-											onClick={openWhatsApp}
-											className="w-full h-12 bg-[#25D366] hover:bg-[#25D366]/90 text-white font-bold gap-2"
+											variant="ghost" 
+											size="icon" 
+											className="text-white/40 hover:text-secondary hover:bg-transparent"
+											onClick={() => copyToClipboard('01932391487', 'bKash')}
 										>
-											<MessageCircle className="h-5 w-5" /> হোয়াটসঅ্যাপে যোগাযোগ করুন
+											<Copy className="h-4 w-4" />
 										</Button>
-									</>
-								) : (
-									<>
-										<div className="grid gap-3">
-											<Button 
-												className="w-full h-12 bg-[#FFDD00] hover:bg-[#FFDD00]/90 text-black font-bold gap-2"
-												onClick={() => window.open('https://buymeacoffee.com/yourprofile', '_blank')}
-											>
-												<Coffee className="h-4 w-4" /> Buy Me a Coffee
-											</Button>
-											<Button 
-												variant="outline" 
-												className="w-full h-12 border-white/20 bg-white/5 hover:bg-white/10 text-white font-bold gap-2"
-												onClick={openWhatsApp}
-											>
-												<MessageCircle className="h-4 w-4 text-[#25D366]" /> Contact via WhatsApp
-											</Button>
-										</div>
-									</>
-								)}
-								<p className="mt-3 text-[10px] text-white/40 text-center italic">
-									{language === 'bn' 
-										? '*সেন্ড মানি করার পর রেফারেন্সে ইমেইল দিতে পারেন।' 
-										: '*You can reference your email when supporting.'}
-								</p>
-							</div>
+									</div>
+
+									<Button 
+										onClick={openWhatsApp}
+										className="w-full h-12 bg-[#25D366] hover:bg-[#25D366]/90 text-white font-bold gap-2"
+									>
+										<MessageCircle className="h-5 w-5" /> 
+										{language === 'bn' ? 'হোয়াটসঅ্যাপে যোগাযোগ করুন' : 'Contact via WhatsApp'}
+									</Button>
+
+									<p className="mt-3 text-[10px] text-white/40 text-center italic">
+										{language === 'bn' 
+											? '*সেন্ড মানি করার পর রেফারেন্সে ইমেইল দিতে পারেন।' 
+											: '*You can include your email as reference after sending.'}
+									</p>
+								</div>
 						</CardContent>
 					</Card>
 				</div>

@@ -174,9 +174,10 @@ async function fetchAyahData(surah: number, ayah: number): Promise<QuranVerse> {
 	};
 }
 async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse, surahNumber: number, ayahNumber: number) {
-	const unsubscribeUrl = `${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'}/api/unsubscribe?token=${subscriber.unsubscribe_token}`;
+	const baseUrl = process.env.APP_URL || 'https://www.getdailyquran.com';
+	const unsubscribeUrl = `${baseUrl}/api/unsubscribe?token=${subscriber.unsubscribe_token}`;
 	const surahName = surahs.find((s) => s.number === surahNumber)?.englishName || 'Surah';
-	const supportUrl = `${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'}/#support`;
+	const supportUrl = `${baseUrl}/#support`;
 
 	const emailHtml = `
 <!DOCTYPE html>

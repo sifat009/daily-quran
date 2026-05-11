@@ -1,51 +1,45 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 
 export const config = {
-  maxDuration: 60,
+	maxDuration: 60,
 };
 
 export default async function handler(req: any, res: any) {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+	if (req.method !== 'GET') {
+		return res.status(405).json({ error: 'Method not allowed' });
+	}
 
-  try {
-    console.log('Unsubscribe request received:', req.url);
-    const token = req.query.token;
+	try {
+		const token = req.query.token;
 
-    if (!token) {
-      return res.status(400).json({ error: 'Token required' });
-    }
+		if (!token) {
+			return res.status(400).json({ error: 'Token required' });
+		}
 
-    // 1. Find the subscriber with this token to get their email
-    console.log('Finding subscriber with token:', token);
-    const { data: subData, error: findError } = await supabase
-      .from('subscribers')
-      .select('email')
-      .eq('unsubscribe_token', token)
-      .single();
+		// 1. Find the subscriber with this token to get their email
+		const { data: subData, error: findError } = await supabase
+			.from('subscribers')
+			.select('email')
+			.eq('unsubscribe_token', token)
+			.single();
 
-    if (findError || !subData) {
-      return res.status(404).json({ error: 'Invalid or expired token' });
-    }
+		if (findError || !subData) {
+			return res.status(404).json({ error: 'Invalid or expired token' });
+		}
 
-    console.log('Unsubscribing email:', subData.email);
-    const { error } = await supabase
-      .from('subscribers')
-      .update({ is_active: false })
-      .eq('email', subData.email)
-      .select();
+		const { error } = await supabase
+			.from('subscribers')
+			.update({ is_active: false })
+			.eq('email', subData.email)
+			.select();
 
-    if (error) throw error;
+		if (error) throw error;
 
-    res.setHeader('Content-Type', 'text/html');
-    return res.status(200).send(
-      `
+		res.setHeader('Content-Type', 'text/html');
+		return res.status(200).send(
+			`
       <!DOCTYPE html>
       <html>
         <head>
@@ -62,16 +56,15 @@ export default async function handler(req: any, res: any) {
         </body>
       </html>
     `,
-      {
-        status: 200,
-        headers: { 'Content-Type': 'text/html' },
-      }
-    );
-  } catch (error: any) {
-    console.log('Unsubscribe error caught:', error.message);
-    return res.status(500).json({ 
-      error: 'Internal server error',
-      details: error.message 
-    });
-  }
+			{
+				status: 200,
+				headers: { 'Content-Type': 'text/html' },
+			},
+		);
+	} catch (error: any) {
+		return res.status(500).json({
+			error: 'Internal server error',
+			details: error.message,
+		});
+	}
 }

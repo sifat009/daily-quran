@@ -44,8 +44,6 @@ export default async function handler(req: any, res: any) {
 		return res.status(405).json({ error: 'Method not allowed' });
 	}
 
-	console.log('Daily Ayah Cron started');
-
 	try {
 		// Get all active subscribers
 		const { data: subscribers, error: subError } = await supabase.from('subscribers').select('*').eq('is_active', true);
@@ -56,11 +54,9 @@ export default async function handler(req: any, res: any) {
 		}
 
 		if (!subscribers || subscribers.length === 0) {
-			console.log('No active subscribers found');
 			return res.status(200).json({ message: 'No active subscribers' });
 		}
 
-		console.log(`Processing ${subscribers.length} subscribers`);
 		let successCount = 0;
 		let failCount = 0;
 
@@ -94,7 +90,6 @@ export default async function handler(req: any, res: any) {
 				]);
 
 				successCount++;
-				console.log(`Successfully sent Ayah ${nextSurah}:${nextAyah} to ${subscriber.email}`);
 			} catch (error) {
 				failCount++;
 				console.error(`Failed to send to ${subscriber.email}:`, error);

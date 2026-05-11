@@ -14,7 +14,8 @@ export default async function handler(req: Request) {
   }
 
   try {
-    const { email } = await req.json();
+    const body = (req as any).body || await req.json();
+    const { email } = typeof body === 'string' ? JSON.parse(body) : body;
 
     if (!email || !email.includes('@')) {
       return new Response(JSON.stringify({ error: 'Valid email required' }), {

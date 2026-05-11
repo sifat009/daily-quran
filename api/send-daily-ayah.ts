@@ -38,13 +38,10 @@ interface Subscriber {
 	unsubscribe_token: string;
 }
 
-export default async function handler(req: Request) {
+export default async function handler(req: any, res: any) {
 	// Allow both GET (for Vercel Cron) and POST (for manual testing)
 	if (req.method !== 'POST' && req.method !== 'GET') {
-		return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-			status: 405,
-			headers: { 'Content-Type': 'application/json' },
-		});
+		return res.status(405).json({ error: 'Method not allowed' });
 	}
 
 	console.log('Daily Ayah Cron started');
@@ -60,10 +57,7 @@ export default async function handler(req: Request) {
 
 		if (!subscribers || subscribers.length === 0) {
 			console.log('No active subscribers found');
-			return new Response(JSON.stringify({ message: 'No active subscribers' }), {
-				status: 200,
-				headers: { 'Content-Type': 'application/json' },
-			});
+			return res.status(200).json({ message: 'No active subscribers' });
 		}
 
 		console.log(`Processing ${subscribers.length} subscribers`);
@@ -107,29 +101,17 @@ export default async function handler(req: Request) {
 			}
 		}
 
-		return new Response(
-			JSON.stringify({
-				message: 'Daily Ayah process completed',
-				successCount,
-				failCount,
-			}),
-			{
-				status: 200,
-				headers: { 'Content-Type': 'application/json' },
-			},
-		);
+		return res.status(200).json({
+			message: 'Daily Ayah process completed',
+			successCount,
+			failCount,
+		});
 	} catch (error: any) {
 		console.error('Fatal error in daily-ayah cron:', error);
-		return new Response(
-			JSON.stringify({
-				error: 'Internal server error',
-				details: error.message,
-			}),
-			{
-				status: 500,
-				headers: { 'Content-Type': 'application/json' },
-			},
-		);
+		return res.status(500).json({
+			error: 'Internal server error',
+			details: error.message,
+		});
 	}
 }
 

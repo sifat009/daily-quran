@@ -5,23 +5,16 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-export default async function handler(req: Request) {
+export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-      status: 405,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    const body = (req as any).body || await req.json();
-    const { email } = typeof body === 'string' ? JSON.parse(body) : body;
+    const { email } = req.body || {};
 
     if (!email || !email.includes('@')) {
-      return new Response(JSON.stringify({ error: 'Valid email required' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return res.status(400).json({ error: 'Valid email required' });
     }
 
     const normalizedEmail = email.toLowerCase().trim();
@@ -38,21 +31,15 @@ export default async function handler(req: Request) {
 
     if (error) throw error;
 
-    return new Response(JSON.stringify({
+    return res.status(200).json({
       message: 'Successfully subscribed! You will receive your daily Ayah starting tomorrow.',
       subscriber: data?.[0],
-    }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
     });
   } catch (error: any) {
     console.error('Subscription error:', error);
-    return new Response(JSON.stringify({ 
+    return res.status(500).json({ 
       error: 'Internal server error',
       details: error.message 
-    }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
     });
   }
 }

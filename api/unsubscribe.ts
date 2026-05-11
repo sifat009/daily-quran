@@ -9,25 +9,17 @@ export const config = {
   maxDuration: 60,
 };
 
-export default async function handler(req: Request) {
+export default async function handler(req: any, res: any) {
   if (req.method !== 'GET') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-      status: 405,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
     console.log('Unsubscribe request received:', req.url);
-    const queryString = (req.url as string).split('?')[1] || '';
-    const searchParams = new URLSearchParams(queryString);
-    const token = searchParams.get('token');
+    const token = req.query.token;
 
     if (!token) {
-      return new Response(JSON.stringify({ error: 'Token required' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return res.status(400).json({ error: 'Token required' });
     }
 
     // 1. Find the subscriber with this token to get their email
@@ -39,14 +31,11 @@ export default async function handler(req: Request) {
       .single();
 
     if (findError || !subData) {
-      return new Response(JSON.stringify({ error: 'Invalid or expired token' }), {
-        status: 404,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return res.status(404).json({ error: 'Invalid or expired token' });
     }
 
     console.log('Unsubscribing email:', subData.email);
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('subscribers')
       .update({ is_active: false })
       .eq('email', subData.email)
@@ -54,7 +43,8 @@ export default async function handler(req: Request) {
 
     if (error) throw error;
 
-    return new Response(
+    res.setHeader('Content-Type', 'text/html');
+    return res.status(200).send(
       `
       <!DOCTYPE html>
       <html>
@@ -78,13 +68,10 @@ export default async function handler(req: Request) {
       }
     );
   } catch (error: any) {
-    console.error('Unsubscribe error:', error);
-    return new Response(JSON.stringify({ 
+    console.log('Unsubscribe error caught:', error.message);
+    return res.status(500).json({ 
       error: 'Internal server error',
       details: error.message 
-    }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
     });
   }
 }

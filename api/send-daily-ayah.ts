@@ -501,28 +501,27 @@ async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse, surah
         </table>
       </a>
 
+      <div class="footer-author">
+        — Sheikh Mishary Rashid Alafasy · ${surahName} (${surahNumber}:${ayahNumber})
+      </div>
+
+      <!-- Footer Info -->
       <!-- Support Section -->
       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 32px;">
         <tr>
           <td style="background-color: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 12px; padding: 24px; text-align: center;">
             <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #64748b; margin-bottom: 12px;">
-              Sadaqah Jariyah · সাদাকা জারিয়া
+              Sadaqah Jariyah
             </div>
             <p style="font-size: 14px; color: #475569; margin: 0 0 20px 0; line-height: 1.5;">
-              Help us keep this service free and ad-free for everyone.<br>
-              এই সার্ভিসটি সবার জন্য ফ্রী এবং বিজ্ঞাপন মুক্ত রাখতে আমাদের সহযোগিতা করুন।
+              Help us keep this service free and ad-free for everyone.
             </p>
             <a href="${supportUrl}" style="display: inline-block; background-color: #1b5e20; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600;">
-              Support our Mission · সাপোর্ট করুন
+              Support our Mission
             </a>
           </td>
         </tr>
       </table>
-
-      <!-- Footer Info -->
-      <div class="footer-author">
-        — Sheikh Mishary Rashid Alafasy · ${surahName} (${surahNumber}:${ayahNumber})
-      </div>
 
       <div class="unsub-text">
         This daily Ayah was sent to ${subscriber.email}.<br>

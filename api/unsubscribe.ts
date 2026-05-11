@@ -5,6 +5,10 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
+export const config = {
+  maxDuration: 60,
+};
+
 export default async function handler(req: Request) {
   if (req.method !== 'GET') {
     return new Response(JSON.stringify({ error: 'Method not allowed' }), {
@@ -14,6 +18,7 @@ export default async function handler(req: Request) {
   }
 
   try {
+    console.log('Unsubscribe request received:', req.url);
     const { searchParams } = new URL(req.url);
     const token = searchParams.get('token');
 
@@ -25,6 +30,7 @@ export default async function handler(req: Request) {
     }
 
     // 1. Find the subscriber with this token to get their email
+    console.log('Finding subscriber with token:', token);
     const { data: subData, error: findError } = await supabase
       .from('subscribers')
       .select('email')
@@ -38,7 +44,7 @@ export default async function handler(req: Request) {
       });
     }
 
-    // 2. Unsubscribe all active records with this email (handles duplicates)
+    console.log('Unsubscribing email:', subData.email);
     const { data, error } = await supabase
       .from('subscribers')
       .update({ is_active: false })

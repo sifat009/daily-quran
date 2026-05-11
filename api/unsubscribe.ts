@@ -19,7 +19,8 @@ export default async function handler(req: Request) {
 
   try {
     console.log('Unsubscribe request received:', req.url);
-    const { searchParams } = new URL(req.url);
+    const url = new URL(req.url, `http://${req.headers.get('host') || 'localhost'}`);
+    const { searchParams } = url;
     const token = searchParams.get('token');
 
     if (!token) {

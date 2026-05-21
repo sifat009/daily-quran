@@ -154,7 +154,7 @@ async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse, surah
 	const baseUrl = process.env.APP_URL || 'https://www.getdailyquran.com';
 	const unsubscribeUrl = `${baseUrl}/api/unsubscribe?token=${subscriber.unsubscribe_token}`;
 	const surahName = surahs.find((s) => s.number === surahNumber)?.englishName || 'Surah';
-	const supportUrl = `${baseUrl}/#support`;
+	const pricingUrl = `${baseUrl}/#pricing`;
 
 	const emailHtml = `
 <!DOCTYPE html>
@@ -483,18 +483,18 @@ async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse, surah
       </div>
 
       <!-- Footer Info -->
-      <!-- Support Section -->
+      <!-- Pricing Section -->
       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 32px;">
         <tr>
           <td style="background-color: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 12px; padding: 24px; text-align: center;">
             <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #64748b; margin-bottom: 12px;">
-              Sadaqah Jariyah
+              Daily Quran Pro
             </div>
             <p style="font-size: 14px; color: #475569; margin: 0 0 20px 0; line-height: 1.5;">
-              Help us keep this service free and ad-free for everyone.
+              Subscribe to Pro to support our premium hosting, email delivery, and ongoing development.
             </p>
-            <a href="${supportUrl}" style="display: inline-block; background-color: #1b5e20; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600;">
-              Support our Mission
+            <a href="${pricingUrl}" style="display: inline-block; background-color: #1b5e20; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600;">
+              Upgrade to Pro
             </a>
           </td>
         </tr>

@@ -12,7 +12,7 @@ const Navbar = () => {
 	const links = [
 		{ to: '/', label: language === 'bn' ? 'হোম' : 'Home' },
 		{ to: '/quran', label: language === 'bn' ? 'ব্রাউজ' : 'Browse' },
-		{ to: '/#support', label: language === 'bn' ? 'সাপোর্ট' : 'Support' },
+		{ to: '/#pricing', label: language === 'bn' ? 'প্রো' : 'Pro' },
 	];
 
 	return (

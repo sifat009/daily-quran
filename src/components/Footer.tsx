@@ -8,8 +8,8 @@ const Footer = () => {
 	return (
 		<footer className="border-t border-border bg-[hsl(220,25%,14%)] text-white/80">
 			<div className="container py-12">
-				<div className="grid gap-8 md:grid-cols-3">
-					<div>
+				<div className="grid gap-8 md:grid-cols-4">
+					<div className="md:col-span-2">
 						<div className="flex items-center gap-2 mb-4">
 							<div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
 								<BookOpen className="h-4 w-4 text-primary-foreground" />
@@ -18,7 +18,7 @@ const Footer = () => {
 								{language === 'bn' ? 'ডেইলি কুরআন' : 'Daily Quran'}
 							</span>
 						</div>
-						<p className="text-sm text-white/50 leading-relaxed">
+						<p className="text-sm text-white/50 leading-relaxed max-w-sm">
 							{language === 'bn'
 								? 'প্রতিদিন একটি আয়াত — আরবী টেক্সট, বাংলা ও ইংরেজি অনুবাদ এবং অডিও তেলাওয়াতসহ সরাসরি আপনার ইমেইল ইনবক্সে।'
 								: 'One Ayah daily — Arabic text, English & Bangla translations, and audio recitation delivered to your inbox.'}
@@ -35,21 +35,30 @@ const Footer = () => {
 							<Link to="/quran" className="hover:text-white transition-colors">
 								{language === 'bn' ? 'কুরআন ব্রাউজ করুন' : 'Browse Quran'}
 							</Link>
-							<Link to="/#support" className="hover:text-white transition-colors">
-								{language === 'bn' ? 'সাপোর্ট' : 'Support'}
+							<Link to="/#pricing" className="hover:text-white transition-colors">
+								{language === 'bn' ? 'প্রো' : 'Pro'}
+							</Link>
+							<Link to="/#faq" className="hover:text-white transition-colors">
+								{language === 'bn' ? 'জিজ্ঞাসা (FAQ)' : 'FAQ'}
 							</Link>
 						</div>
 					</div>
 					<div>
 						<h4 className="font-semibold mb-3 text-white text-sm">
-							{language === 'bn' ? 'কমিউনিটি' : 'Community'}
+							{language === 'bn' ? 'লিগ্যাল ও কমিউনিটি' : 'Legal & Community'}
 						</h4>
 						<div className="flex flex-col gap-2 text-sm text-white/50">
-							<Link to="/#faq" className="hover:text-white transition-colors">
-								{language === 'bn' ? 'জিজ্ঞাসা (FAQ)' : 'FAQ'}
+							<Link to="/terms" className="hover:text-white transition-colors">
+								{language === 'bn' ? 'শর্তাবলী (Terms)' : 'Terms of Service'}
 							</Link>
-							<a href="https://wa.me/8801932391487" target="_blank" className="hover:text-white transition-colors">
-								{language === 'bn' ? 'আমাদের সাথে যোগাযোগ' : 'Contact Us'}
+							<Link to="/privacy" className="hover:text-white transition-colors">
+								{language === 'bn' ? 'গোপনীয়তা (Privacy)' : 'Privacy Policy'}
+							</Link>
+							<Link to="/refund" className="hover:text-white transition-colors">
+								{language === 'bn' ? 'রিফান্ড (Refund)' : 'Refund Policy'}
+							</Link>
+							<a href="https://wa.me/8801932391487" target="_blank" className="hover:text-white transition-colors mt-2 text-white/70">
+								{language === 'bn' ? 'যোগাযোগ করুন' : 'Contact Us'}
 							</a>
 						</div>
 					</div>

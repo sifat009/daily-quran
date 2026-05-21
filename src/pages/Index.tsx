@@ -128,7 +128,7 @@ const Index = () => {
 			faqs: [
 				{
 					q: 'ডেইলি কুরআন কি ফ্রী?',
-					a: 'হ্যাঁ, ডেইলি কুরআন সবার জন্য একটি ফ্রী সার্ভিস। আমরা আপনাদের সহযোগিতার (সাদাকা) মাধ্যমে এই সেবাটি সচল রাখি।',
+					a: 'ডেইলি কুরআন একটি ফ্রী বেসিক প্ল্যান অফার করে। প্রিমিয়াম ইমেইল ডেলিভারি, হোস্টিং এবং চলমান ডেভেলপমেন্টের মতো পরিচালন ব্যয় বহন করতে আমরা একটি প্রো/প্রিমিয়াম সাবস্ক্রিপশনও প্রদান করি।',
 				},
 				{
 					q: 'কোন অনুবাদ ব্যবহার করা হয়?',
@@ -248,7 +248,7 @@ const Index = () => {
 			faqs: [
 				{
 					q: 'Is Daily Quran free?',
-					a: 'Yes, Daily Quran is a free service supported by voluntary contributions (Sadaqah) from the community.',
+					a: 'Daily Quran offers a free basic plan. We also provide a Pro/Premium subscription to cover operational costs such as premium email delivery, hosting, and ongoing development.',
 				},
 				{
 					q: 'Which translation do you use?',

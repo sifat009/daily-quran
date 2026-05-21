@@ -216,6 +216,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@paddle/paddle-js@^1.6.4":
+  version "1.6.4"
+  resolved "https://registry.npmjs.org/@paddle/paddle-js/-/paddle-js-1.6.4.tgz"
+  integrity sha512-ncfnS6I8mCX6krZ3Sgz2iAYivGmhdI81yt9mT6prtPj4Ipd9J3M12LCJRUFL4FB7BYeeuV04c33RSEnbZUBCaA==
+
 "@playwright/test@^1.57.0":
   version "1.59.1"
   resolved "https://registry.npmjs.org/@playwright/test/-/test-1.59.1.tgz"

@@ -4,11 +4,17 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { useLanguage } from '@/hooks/useLanguage';
-import { openPaddleCheckout } from '@/lib/paddle';
+import { initializeLemonSqueezy } from '@/lib/lemonsqueezy';
+import { useEffect } from 'react';
 
 const PricingSection = () => {
 	const { language } = useLanguage();
 	const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
+
+	useEffect(() => {
+		// Pre-load the Lemon Squeezy script so the overlay is ready
+		initializeLemonSqueezy().catch(console.error);
+	}, []);
 
 	const copyToClipboard = (text: string, label: string) => {
 		navigator.clipboard.writeText(text);
@@ -25,31 +31,32 @@ const PricingSection = () => {
 		window.open(`https://wa.me/8801932391487?text=${encodeURIComponent(message)}`, '_blank');
 	};
 
-	const handlePaddleCheckout = async () => {
+	const handleCheckout = async () => {
 		setIsCheckoutLoading(true);
 		try {
-			await openPaddleCheckout();
-		} catch (err: any) {
-			console.error(err);
-			if (err.message === 'PADDLE_NOT_INITIALIZED') {
+			const checkoutUrl = import.meta.env.VITE_LEMON_SQUEEZY_CHECKOUT_URL;
+			
+			if (!checkoutUrl || checkoutUrl.includes('VARIANT_ID')) {
 				toast.error(
 					language === 'bn'
-						? 'প্যাডেল পেমেন্ট গেটওয়ে কনফিগার করা নেই। অনুগ্রহ করে VITE_PADDLE_CLIENT_TOKEN সেট করুন।'
-						: 'Paddle payment gateway is not initialized. Please configure VITE_PADDLE_CLIENT_TOKEN.'
+						? 'চেকআউট লিংক কনফিগার করা নেই। অনুগ্রহ করে VITE_LEMON_SQUEEZY_CHECKOUT_URL সেট করুন।'
+						: 'Checkout URL is not configured. Please configure VITE_LEMON_SQUEEZY_CHECKOUT_URL in .env.local.'
 				);
-			} else if (err.message === 'PADDLE_PRICE_ID_MISSING') {
-				toast.error(
-					language === 'bn'
-						? 'প্যাডেল প্রাইস আইডি কনফিগার করা নেই। অনুগ্রহ করে VITE_PADDLE_PRICE_ID সেট করুন।'
-						: 'Paddle Price ID is not configured. Please configure VITE_PADDLE_PRICE_ID.'
-				);
-			} else {
-				toast.error(
-					language === 'bn'
-						? 'চেকআউট খুলতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।'
-						: 'Failed to open checkout. Please try again.'
-				);
+				return;
 			}
+
+			// Ensure script is loaded
+			await initializeLemonSqueezy();
+			
+			// Open the Lemon Squeezy overlay programmatically
+			window.LemonSqueezy.Url.Open(checkoutUrl);
+		} catch (err) {
+			console.error('Failed to open checkout:', err);
+			toast.error(
+				language === 'bn'
+					? 'চেকআউট খুলতে ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।'
+					: 'Failed to open checkout. Please try again.'
+			);
 		} finally {
 			setIsCheckoutLoading(false);
 		}
@@ -131,7 +138,7 @@ const PricingSection = () => {
 									</div>
 
 									<Button 
-										onClick={handlePaddleCheckout}
+										onClick={handleCheckout}
 										disabled={isCheckoutLoading}
 										className="w-full h-12 bg-secondary hover:bg-secondary/90 text-white font-bold gap-2"
 									>

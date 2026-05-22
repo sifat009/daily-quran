@@ -494,7 +494,7 @@ async function sendAyahEmail(subscriber: Subscriber, ayahData: QuranVerse, surah
               Subscribe to Pro to support our premium hosting, email delivery, and ongoing development.
             </p>
             <a href="${pricingUrl}" style="display: inline-block; background-color: #1b5e20; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600;">
-              Upgrade to Pro
+              Support us by going Pro
             </a>
           </td>
         </tr>
